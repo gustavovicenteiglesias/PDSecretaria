@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import "./App.css";
 
 import AuthService from "./services/auth.service";
@@ -12,7 +13,8 @@ import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
-
+import {Navbar,Nav} from 'react-bootstrap'
+import '@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -45,72 +47,48 @@ class App extends Component {
     const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
 
     return (
-      <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <Link to={"/"} className="navbar-brand">
-            bezKoder
-          </Link>
-          <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
-                Home
-              </Link>
-            </li>
-
+      
+        <>
+        <Navbar collapseOnSelect expand="lg" className="bg-color" variant="light">
+        <Navbar.Brand href="#home">Secretaria de Educación </Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+        <Nav className="mr-auto">
+        <Nav.Link href="/home">Home</Nav.Link>
+        
             {showModeratorBoard && (
-              <li className="nav-item">
-                <Link to={"/mod"} className="nav-link">
-                  Moderator Board
-                </Link>
-              </li>
+              
+              <Nav.Link href="/mod">Moderator Board</Nav.Link>
+              
             )}
 
             {showAdminBoard && (
-              <li className="nav-item">
-                <Link to={"/admin"} className="nav-link">
-                  Admin Board
-                </Link>
-              </li>
+              <Nav.Link href="/admin">Admin</Nav.Link>
+              
             )}
 
             {currentUser && (
-              <li className="nav-item">
-                <Link to={"/user"} className="nav-link">
-                  User
-                </Link>
-              </li>
+              <Nav.Link href="/user">User</Nav.Link>
+              
             )}
-          </div>
-
+    </Nav>
+    
+           
           {currentUser ? (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/profile"} className="nav-link">
-                  {currentUser.username}
-                </Link>
-              </li>
-              <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={this.logOut}>
-                  LogOut
-                </a>
-              </li>
-            </div>
+              <Nav>
+              <Nav.Link href="/profile">{currentUser.username}</Nav.Link>
+              <Nav.Link href="/login" onClick={this.logOut}>LogOut</Nav.Link>
+              </Nav>
           ) : (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/login"} className="nav-link">
-                  Login
-                </Link>
-              </li>
-
-              <li className="nav-item">
-                <Link to={"/register"} className="nav-link">
-                  Sign Up
-                </Link>
-              </li>
-            </div>
+            <Nav>
+            <Nav.Link href="/login" >LogOut</Nav.Link>
+            <Nav.Link href="/register" >Sign Up</Nav.Link>
+            </Nav>
           )}
-        </nav>
+          
+    
+  </Navbar.Collapse>
+</Navbar>
 
         <div className="container mt-3">
           <Switch>
@@ -123,7 +101,7 @@ class App extends Component {
             <Route path="/admin" component={BoardAdmin} />
           </Switch>
         </div>
-      </div>
+      </>
     );
   }
 }

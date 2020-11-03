@@ -30,3 +30,7 @@ label {
   -webkit-border-radius: 50%;
   border-radius: 50%;
 }
+.bg-color{
+  background: rgba(153, 198, 187, 0.55);
+}
+

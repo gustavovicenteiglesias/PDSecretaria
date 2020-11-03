@@ -2,6 +2,9 @@ import React, { Component } from "react";
 
 import UserService from "../services/user.service";
 
+//import Tabla from './tabla'
+import Tabla from './nuevaTabla.tsx'
+
 export default class BoardAdmin extends Component {
   constructor(props) {
     super(props);
@@ -10,8 +13,9 @@ export default class BoardAdmin extends Component {
       content: ""
     };
   }
-
+  
   componentDidMount() {
+
     UserService.getAdminBoard().then(
       response => {
         this.setState({
@@ -37,6 +41,7 @@ export default class BoardAdmin extends Component {
         <header className="jumbotron">
           <h3>{this.state.content}</h3>
         </header>
+        <Tabla/>
       </div>
     );
   }
