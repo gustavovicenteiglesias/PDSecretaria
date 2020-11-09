@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Grilla from './Gridejemplo';
 import Grilla1 from './Gridejemplo1';
+import Grilla2 from './Gridejemplo2'
 import UserService from "../services/user.service";
 import Tabla from './Tabla'
 export default class BoardUser extends Component {
@@ -14,7 +15,8 @@ export default class BoardUser extends Component {
   }
 
   componentDidMount() {
-    UserService.getUserBoard().then(
+ 
+   /* UserService.getUserBoard().then(
       response => {
         this.setState({
           content: response.data,
@@ -32,19 +34,17 @@ export default class BoardUser extends Component {
             error.toString()
         });
       }
-    );
-  }
+    );*/
+  } 
 
   render() {
     return (
-      <div className="container">
-        <header className="jumbotron">
-          <h3>{this.state.content}</h3>
-        </header>
-        <div hidden={this.state.hidden}>
-        <Grilla1></Grilla1>
+    
+        <div hidden={false}>
+        
+        <Grilla2></Grilla2>
         </div>
-      </div>
+     
     );
   }
 }

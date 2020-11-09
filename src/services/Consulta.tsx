@@ -10,11 +10,7 @@ export const useGetProfe = () => {
       }
       useEffect(()=>{
         getData()
-        const interval = setInterval(() => {
-          getData()
-          
-        }, 100000);
-        return () => clearInterval(interval);
+       
   },[]);
   
     return profes;

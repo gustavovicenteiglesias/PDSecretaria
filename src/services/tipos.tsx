@@ -11,11 +11,11 @@ export interface Profesor{
     fechaIngreso: String,
     fecha_nacimiento: String,
     id: Number,
-    idEscuela:Escuela,
+    escuelas:Escuela [],
     legajo: Number,
     nombre: String
 }
 export interface Escuela{
-  dEscuela: Number, 
+  idEscuela: Number, 
   nombre: String
 }

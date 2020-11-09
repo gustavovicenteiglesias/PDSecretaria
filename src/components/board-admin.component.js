@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import UserService from "../services/user.service";
 
 //import Tabla from './tabla'
-import Tabla from './nuevaTabla.tsx'
+
 
 export default class BoardAdmin extends Component {
   constructor(props) {
@@ -41,7 +41,7 @@ export default class BoardAdmin extends Component {
         <header className="jumbotron">
           <h3>{this.state.content}</h3>
         </header>
-        <Tabla/>
+        
       </div>
     );
   }

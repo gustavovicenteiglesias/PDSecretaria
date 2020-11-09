@@ -68,7 +68,7 @@ class App extends Component {
             )}
 
             {currentUser && (
-              <Nav.Link href="/user">User</Nav.Link>
+              <Nav.Link href="/user">Profesor</Nav.Link>
               
             )}
     </Nav>
@@ -81,7 +81,7 @@ class App extends Component {
               </Nav>
           ) : (
             <Nav>
-            <Nav.Link href="/login" >LogOut</Nav.Link>
+            <Nav.Link href="/login" >Login</Nav.Link>
             <Nav.Link href="/register" >Sign Up</Nav.Link>
             </Nav>
           )}
