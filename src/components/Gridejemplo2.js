@@ -33,7 +33,9 @@ import {
     ExportPanel,
     TableRowDetail,
     TableTreeColumn,
-    PagingPanel
+    PagingPanel,
+    TableColumnVisibility,
+    ColumnChooser
 } from '@devexpress/dx-react-grid-material-ui';
 import TextField from '@material-ui/core/TextField';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -354,7 +356,7 @@ const [columns] = useState([
      },
    }
 ]);
-
+const [hiddenColumnNames, setHiddenColumnNames] = useState(['nombre', 'apellido']);
 
   const commitChanges = ({ added, changed }) => {
     let changedRows;
@@ -444,6 +446,10 @@ const [columns] = useState([
                     greaterThanOrEqual:'Mayor igual'
                      }}
         />
+         <TableColumnVisibility
+          hiddenColumnNames={hiddenColumnNames}
+          onHiddenColumnNamesChange={setHiddenColumnNames}
+        />
         <TableRowDetail
           contentComponent={RowDetail}
         />
@@ -451,7 +457,7 @@ const [columns] = useState([
           <PagingPanel />
       
          <Toolbar />
-        
+         <ColumnChooser />
         <ExportPanel startExport={startExport}/>
 
         <PopupEditing popupComponent={Popup} />

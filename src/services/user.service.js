@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = 'https://secretaria-educacion.herokuapp.com/api/test/';
+const API_URL = 'https://secretaria-educacion.herokuapp.co/api/test/';
 
 class UserService {
   getPublicContent() {

@@ -130,7 +130,7 @@ const RowDetail = ({ row }) => (
         });
       };
           
-    const URL='http://localhost:8080/api/profesor/all';
+    const URL='https://secretaria-educacion.herokuapp.com/api/profesor/all';
     const [rows,setRows] = useState([]);
     const getData = async () => {
       const  {list} = await get(URL);
