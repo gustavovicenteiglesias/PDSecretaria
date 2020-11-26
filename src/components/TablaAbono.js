@@ -550,7 +550,7 @@ class TablesAbono extends React.Component {
                       /> 
                       </div>
                       <div class="form-group col-md-4 ">
-                      <label>Cargo</label>
+                      <label>Titulo Habilitante</label>
                       <Input
                         className="form-control bg-white text-dark "
                         readOnly={editarModal}
