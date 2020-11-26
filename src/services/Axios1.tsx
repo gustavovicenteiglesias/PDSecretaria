@@ -7,3 +7,18 @@ import authHeader from './auth-header';
     console.log(data)
     return data;
 };
+export async function put(path:string,params:null)
+ {
+    await axios.post(path,params,{ headers: authHeader() })
+    .then(response=> { return response.data })
+    .catch(error =>{ return error })
+    
+};
+
+export async function delet(path:string)
+ {
+     await axios.delete(path,{ headers: authHeader() })
+    .then(response=> { return response.data })
+    .catch(error =>{ return error })
+    
+};

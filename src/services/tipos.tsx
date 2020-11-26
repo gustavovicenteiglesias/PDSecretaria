@@ -18,4 +18,4 @@ export interface Profesor{
 export interface Escuela{
   idEscuela: Number, 
   nombre: String
-}
+} 

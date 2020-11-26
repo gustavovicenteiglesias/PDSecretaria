@@ -1,4 +1,4 @@
-import React, { useState ,useEffect,useRef,useCallback} from 'react';
+import React, { useState ,useEffect,useRef,useCallback, useMemo} from 'react';
 import Paper from '@material-ui/core/Paper';
 import {
   Plugin, Template, TemplateConnector, TemplatePlaceholder,
@@ -39,6 +39,7 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import TextField from '@material-ui/core/TextField';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -53,12 +54,66 @@ import MomentUtils from '@date-io/moment';
 //import DateFnsUtils from '@date-io/date-fns'
 import { get } from "../services/Axios1";
 import Input from '@material-ui/core/Input';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles,useTheme,makeStyles } from '@material-ui/core/styles';
 import DateRange from '@material-ui/icons/DateRange';
 import * as PropTypes from 'prop-types';
 import saveAs from 'file-saver';
+import {put} from '../services/Axios1';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 /* eslint-disable no-shadow */
+import {useGetEscuelas} from '../services/Consulta';
+import { isConstructorDeclaration } from 'typescript';
+/*const save=(escuelasvalue,nombreescuelas)=>{
+  const lista=nombreescuelas;
+  for(let i=0;escuelasvalue.length;i++){
+    
+    var search=lista.find(item=>item.nombre === escuelasvalue[i].nombre)
+  }
+  return search
+ 
+}
+*/
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    maxWidth: 300,
+  },
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  chip: {
+    margin: 2,
+  },
+  noLabel: {
+    marginTop: theme.spacing(3),
+  },
+}));
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+
+
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
 const FilterIcon = ({ type, ...restProps }) => {
   if (type === 'month') return <DateRange {...restProps} />;
   return <TableFilterRow.Icon type={type} {...restProps} />;
@@ -119,7 +174,7 @@ row.escuelas.map((data,i)=>{
   return(
    
     <div>
-     
+    
    {data.nombre}
   </div>
   )
@@ -127,15 +182,104 @@ row.escuelas.map((data,i)=>{
 
 );
 
-const Popup = ({
+const Popup = (
+  
+  { 
   row,
   onChange,
   onApplyChanges,
   onCancelChanges,
   open,
-}) => (
+  onChanges,
+  escuelas
+}) =>{
+  
+  //const [escuelas,setEscuelas]=useState([]);
+  //let escuelasvalue=[]
+  const [escuelasvalue,setEscuelasvalue]=useState([])
+  //let escuelas=[]
+  const[nombreescuelas,setNombreescuelas]=useState([]);
+  
+  const especialidades=
+  {
+    especialidad : ["Historia","Arte","Directora","Vice-directora","Maestra","Matematicas"]
+  };
+  //const [escuelasvalue,setEscuelasvalue]=useState([]);
+  
+  const getDataEsc = async () => {
+    const  {list} = await get('https://secretaria-educacion.herokuapp.com/api/escuela/all');
+    setNombreescuelas(list)
+    }
+    useMemo(()=>{
+      getDataEsc()
+     console.log("paso por aca escuelas")
+},[]);
+
+  const classes = useStyles();
+  const theme = useTheme();
+  const handleChange = (event) => {
+    //row.especialidad=event.target.value ;
+    return event.target.value
+  };
+ 
+  const handleChangeEscuelas = (event) => {
+    let consulta=event.target.value
+    let contador=event.target.value.length-1
+  
+    console.log(consulta)
+    console.log(event.target.value.length+1)
+    setEscuelasvalue(event.target.value);
+    
+    const lista=nombreescuelas;
+    const search=lista.find(item=>{
+     
+        console.log('pasa por loop')
+        if(item.nombre === consulta[contador]){
+          return item
+        }
+
+     
+      
+    
+    })
+    
+    console.log('escuelasvalue')
+    console.log(escuelasvalue)
+    console.log('busqueda')
+    console.log(search)
+    escuelas.push(search)
+    //setEscuelas(escuelas);
+    onChange(
+      {target: { name:"escuelas", value:escuelas}})
+  };
+ 
+
+  const handleChangeMultiple = (event) => {
+    const { options } = event.target;
+    const value = [];
+    for (let i = 0, l = options.length; i < l; i += 1) {
+      if (options[i].selected) {
+        value.push(options[i].value);
+      }
+    }
+    //setEscuelas(value);
+  };
+  
+  
+    console.log("ROWS")
+    //row.escuelas="uno"
+    console.log(row)
+    console.log(escuelas)
+    console.log(escuelasvalue)
+
+   
+
+console.log('nombre de escuela')
+console.log(nombreescuelas)
+  return (
+    
   <Dialog open={open} onClose={onCancelChanges} aria-labelledby="form-dialog-title">
-    <DialogTitle id="form-dialog-title">Employee Details</DialogTitle>
+    <DialogTitle id="form-dialog-title">Profesores</DialogTitle>
     <DialogContent>
       <MuiGrid container spacing={3}>
         <MuiGrid item xs={6}>
@@ -155,13 +299,21 @@ const Popup = ({
               value={row.legajo}
               onChange={onChange}
             />
-            <TextField
-              margin="normal"
+           
+            <InputLabel id="demo-simple-select-label">Especialidad</InputLabel>
+            <Select
+              labelId="Especialidad"
               name="especialidad"
-              label="Especialidad"
+              id="demo-simple-select"
               value={row.especialidad || ''}
               onChange={onChange}
-            />
+            >
+                {especialidades.especialidad.map((name) => (
+            <MenuItem key={name} value={name} >
+              {name}
+            </MenuItem>
+          ))}
+            </Select>
           </FormGroup>
         </MuiGrid>
         <MuiGrid item xs={6}>
@@ -181,10 +333,31 @@ const Popup = ({
                 onChange={(_, value) => onChange({
                   target: { name: 'fecha_nacimiento', value },
                 })}
-                format="DD/MM/YYYY"
+                format="YYYY-MM-DD"
               />
             </MuiPickersUtilsProvider>
-            
+            <FormControl className={classes.formControl}>
+            <InputLabel id="demo-simple-select-label">Escuela</InputLabel>
+            <Select
+                labelId="Escuelas"
+                id="demo-mutiple-name"
+                name="escuelas"
+                
+                value={escuelas}
+                onChange={onChanges}
+                input={<Input />}
+                MenuProps={MenuProps}
+                values='ddddddd'
+              >
+                {nombreescuelas.map((name) => (
+                  <MenuItem key={name} value={{idEscuela:name.idEscuela,nombre:name.nombre}}
+                   style={getStyles(name, escuelasvalue, theme)}
+                   >
+                    {name.nombre}
+                  </MenuItem>
+                ))}
+        </Select>
+        </FormControl>
           </FormGroup>
         </MuiGrid>
       </MuiGrid>
@@ -199,6 +372,7 @@ const Popup = ({
     </DialogActions>
   </Dialog>
 );
+}
 
 const PopupEditing = React.memo(({ popupComponent: Popup }) => (
   <Plugin>
@@ -217,8 +391,11 @@ const PopupEditing = React.memo(({ popupComponent: Popup }) => (
             changeRow, changeAddedRow, commitChangedRows, commitAddedRows,
             stopEditRows, cancelAddedRows, cancelChangedRows,
           },
+          
         ) => {
+          
           const isNew = addedRows.length > 0;
+          let escuelas=[]
           let editedRow;
           let rowId;
           if (isNew) {
@@ -229,7 +406,13 @@ const PopupEditing = React.memo(({ popupComponent: Popup }) => (
             const targetRow = rows.filter(row => getRowId(row) === rowId)[0];
             editedRow = { ...targetRow, ...rowChanges[rowId] };
           }
+          const processValueMultiple=({ target: { name, value } })=>{
+            
+            escuelas.push(value)
+            console.log(escuelas)
+            
 
+          }
           const processValueChange = ({ target: { name, value } }) => {
             const changeArgs = {
               rowId,
@@ -268,6 +451,9 @@ const PopupEditing = React.memo(({ popupComponent: Popup }) => (
               onChange={processValueChange}
               onApplyChanges={applyChanges}
               onCancelChanges={cancelChanges}
+              onChanges={processValueMultiple}
+              escuela={escuelas}
+              
             />
           );
         }}
@@ -281,15 +467,16 @@ const PopupEditing = React.memo(({ popupComponent: Popup }) => (
 ));
 
 const getRowId = row => row.id;
+/////////////////////////////////////////////////////////////////////////////////
 export default () => {
+
   const exporterRef = useRef(null);
 
   const startExport = useCallback(() => {
     exporterRef.current.exportGrid();
   }, [exporterRef]);
   const [selection, setSelection] = useState([]);
-      console.log("Selection")
-      console.log(selection)
+     
       const onSave = (workbook) => {
         workbook.xlsx.writeBuffer().then((buffer) => {
           saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
@@ -302,7 +489,7 @@ export default () => {
     const  {list} = await get(URL);
     setRows(list)
     }
-    useEffect(()=>{
+    useMemo(()=>{
       getData()
      console.log("paso por aca")
 },[]);
@@ -331,7 +518,7 @@ const [columns] = useState([
  const [tableColumnExtensions] = useState([
    { columnName: 'escuelas', width: 300 },
  ]);
-
+ let profesores;
  const [filteringColumnExtensions] = useState([
  {
    columnName: 'fechaIngreso',
@@ -357,30 +544,32 @@ const [columns] = useState([
    }
 ]);
 const [hiddenColumnNames, setHiddenColumnNames] = useState(['nombre', 'apellido']);
-
-  const commitChanges = ({ added, changed }) => {
-    let changedRows;
-    let changedRow;
-    if (added) {
-      const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
-      changedRows = [
-        ...rows,
-        ...added.map((row, index) => ({
-          id: startingAddedId + index,
-          ...row,
-        })),
-      ];
-    }
-    if (changed) {
-      changedRows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row) );
-     console.log(Object.keys.length)
-     changedRow=Object.keys.length
-      
-    }
-    setRows(changedRows);
-    console.log(changedRows[changedRow])
-  };
-
+const commitChanges = ({ added, changed }) => {
+  let changedRows;
+  if (added) {
+    const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+    changedRows = [
+      ...rows,
+      ...added.map((row, index) => ({
+        id: startingAddedId + index,
+        ...row,
+      })),
+    ];
+  }
+  if (changed) {
+    changedRows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+    console.log('changed')
+    console.log(changed)
+  }
+  setRows(changedRows);
+  console.log('changedRow')
+  console.log(changedRows)
+};
+  
+  useEffect(()=>{
+ 
+   console.log("paso por aca useEffect")
+},[rows]);
   return (
     <Paper>
       <Grid

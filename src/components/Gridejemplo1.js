@@ -1,290 +1,300 @@
-import React, { useState,useEffect,useRef,useCallback } from 'react';
-import * as PropTypes from 'prop-types';
+
+
+import React, { useState,useMemo } from 'react';
+import {
+  SortingState, EditingState, PagingState, SummaryState,
+  IntegratedPaging, IntegratedSorting, IntegratedSummary,
+} from '@devexpress/dx-react-grid';
+import {
+  Grid,
+  Table, TableHeaderRow, TableEditRow, TableEditColumn,
+  PagingPanel, DragDropProvider, TableColumnReordering,
+  TableFixedColumns, TableSummaryRow,
+} from '@devexpress/dx-react-grid-material-ui';
 import Paper from '@material-ui/core/Paper';
-import {
-    RowDetailState, 
-    SortingState,
-    IntegratedSorting ,
-    FilteringState,
-    DataTypeProvider,
-    IntegratedFiltering,
-    TreeDataState,
-    CustomTreeData,
-    SelectionState,
-  PagingState,
-  IntegratedPaging,
-  IntegratedSelection,
-    
-        } from '@devexpress/dx-react-grid';
-import { GridExporter } from '@devexpress/dx-react-grid-export';      
-import {
-    Grid,
-    Table,
-    TableHeaderRow,
-    TableGroupRow,
-    GroupingPanel,
-    TableSummaryRow,
-    TableSelection,
-    DragDropProvider,
-    TableFilterRow,
-    Toolbar,
-    ExportPanel,
-    TableRowDetail,
-    TableTreeColumn,
-    PagingPanel
-    
-  } from '@devexpress/dx-react-grid-material-ui';
-  import Input from '@material-ui/core/Input';
-  import { withStyles } from '@material-ui/core/styles';
-  import DateRange from '@material-ui/icons/DateRange';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import TableCell from '@material-ui/core/TableCell';
 
-import saveAs from 'file-saver';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
+import { withStyles } from '@material-ui/core/styles';
 
+
+import { CurrencyTypeProvider } from '../theme-sources/material-ui/components/currency-type-provider';
 import { get } from "../services/Axios1";
 
 
 
+const styles = theme => ({
+  lookupEditCell: {
+    padding: theme.spacing(1),
+  },
+  dialog: {
+    width: 'calc(100% - 16px)',
+  },
+  inputRoot: {
+    width: '100%',
+  },
+  selectMenu: {
+    position: 'absolute !important',
+  },
+});
 
-
-const FilterIcon = ({ type, ...restProps }) => {
-    if (type === 'month') return <DateRange {...restProps} />;
-    return <TableFilterRow.Icon type={type} {...restProps} />;
-  };
-
-  const styles = theme => ({
-    root: {
-      margin: theme.spacing(1),
-    },
-    numericInput: {
-      fontSize: '14px',
-      textAlign: 'right',
-      width: '100%',
-    },
-  });
-  
-  const CurrencyEditorBase = ({ value, onValueChange, classes }) => {
-    const handleChange = (event) => {
-      const { value: targetValue } = event.target;
-      if (targetValue.trim() === '') {
-        onValueChange();
-        return;
-      }
-      onValueChange(parseInt(targetValue, 10));
-    };
-    return (
-      <Input
-        type="number"
-        classes={{
-          input: classes.numericInput,
-          root: classes.root,
-        }}
-        fullWidth
-        value={value === undefined ? '' : value}
-        inputProps={{
-          min: 0,
-          placeholder: 'Filter...',
-        }}
-        onChange={handleChange}
-      />
-    );
-  };
-  
-  CurrencyEditorBase.propTypes = {
-    value: PropTypes.number,
-    onValueChange: PropTypes.func.isRequired,
-    classes: PropTypes.object.isRequired,
-  };
-  
-  CurrencyEditorBase.defaultProps = {
-    value: undefined,
-  };
-  
-  const CurrencyEditor = withStyles(styles)(CurrencyEditorBase)
-
-const RowDetail = ({ row }) => (
-  row.escuelas.map((data,i)=>{
-    return(
-     
-      <div>
-       
-     {data.nombre}
-    </div>
-    )
-  })
- 
+const AddButton = ({ onExecute }) => (
+  <div style={{ textAlign: 'center' }}>
+    <Button
+      color="primary"
+      onClick={onExecute}
+      title="Create new row"
+    >
+      New
+    </Button>
+  </div>
 );
 
-    
-    const Tabla2 =  () => {
-      const exporterRef = useRef(null);
+const EditButton = ({ onExecute }) => (
+  <IconButton onClick={onExecute} title="Edit row">
+    <EditIcon />
+  </IconButton>
+);
 
-  const startExport = useCallback(() => {
-    exporterRef.current.exportGrid();
-  }, [exporterRef]);
-  const [selection, setSelection] = useState([]);
-      console.log("Selection")
-      console.log(selection)
-      const onSave = (workbook) => {
-        workbook.xlsx.writeBuffer().then((buffer) => {
-          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
-        });
-      };
-          
-    const URL='https://secretaria-educacion.herokuapp.com/api/profesor/all';
-    const [rows,setRows] = useState([]);
-    const getData = async () => {
-      const  {list} = await get(URL);
-      setRows(list)
+const DeleteButton = ({ onExecute }) => (
+  <IconButton
+    onClick={() => {
+      // eslint-disable-next-line
+      if (window.confirm('Are you sure you want to delete this row?')) {
+        onExecute();
       }
-      useEffect(()=>{
-        getData()
-       console.log("paso por aca")
-  },[]);
+    }}
+    title="Delete row"
+  >
+    <DeleteIcon />
+  </IconButton>
+);
 
-    const [expandedRowIds, setExpandedRowIds] = useState([]);
-    console.log("data")
-    
-    console.log(rows)
-    
-    const [columns] = useState([
+const CommitButton = ({ onExecute }) => (
+  <IconButton onClick={onExecute} title="Save changes">
+    <SaveIcon />
+  </IconButton>
+);
+
+const CancelButton = ({ onExecute }) => (
+  <IconButton color="secondary" onClick={onExecute} title="Cancel changes">
+    <CancelIcon />
+  </IconButton>
+);
+
+const commandComponents = {
+  add: AddButton,
+  edit: EditButton,
+  delete: DeleteButton,
+  commit: CommitButton,
+  cancel: CancelButton,
+};
+
+const Command = ({ id, onExecute }) => {
+  const CommandButton = commandComponents[id];
+  return (
+    <CommandButton
+      onExecute={onExecute}
+    />
+  );
+};
+
+
+
+const LookupEditCellBase = ({
+  availableColumnValues, value, onValueChange, classes,
+}) => (
+  <TableCell
+    className={classes.lookupEditCell}
+  >
+    <Select
+      value={value}
+      onChange={event => onValueChange(event.target.value)}
+      MenuProps={{
+        className: classes.selectMenu,
+      }}
+      input={(
+        <Input
+          classes={{ root: classes.inputRoot }}
+        />
+      )}
+    >
+      {availableColumnValues.map(item => (
+        <MenuItem key={item} value={item}>
+          {item}
+        </MenuItem>
+      ))}
+    </Select>
+  </TableCell>
+);
+export const LookupEditCell = withStyles(styles, { name: 'ControlledModeDemo' })(LookupEditCellBase);
+
+const Cell = (props) => {
+  const { column } = props;
+  
+  return <Table.Cell {...props} />;
+};
+
+const EditCell = (props) => {
+  const { column } = props;
+ 
+  return <TableEditRow.Cell {...props} />;
+};
+
+const getRowId = row => row.id;
+
+export default () => {
+  const [columns] = useState([
     { name: 'legajo', title: 'Legajo' },
     { name: 'nombre', title: 'Nombre' },
     { name: 'apellido', title: 'Apellido' },
     { name: 'fechaIngreso', title: 'Fecha Ingreso' },
     { name: 'fecha_nacimiento', title: 'Fecha Nacimiento' },
     { name: 'especialidad', title: 'Especialidad' },
-    
-   ]);
-    const [sorting, setSorting] = useState([{ columnName: 'nombre', direction: 'asc' }]);
-    const [dateColumns] = useState(['fechaIngreso','fecha_nacimiento']);
-    const [dateFilterOperations] = useState(['month', 'contains', 'startsWith', 'endsWith']);
-    const [currencyColumns] = useState(['legajo']);
-    const [currencyFilterOperations] = useState([
-        'equal',
-        'notEqual',
-        'greaterThan',
-        'greaterThanOrEqual',
-        'lessThan',
-        'lessThanOrEqual',
-    ]);
-    const [tableColumnExtensions] = useState([
-      { columnName: 'escuelas', width: 300 },
-    ]);
-  
-    const [filteringColumnExtensions] = useState([
-    {
-      columnName: 'fechaIngreso',
-      predicate: (value, filter, row) => {
-        if (!filter.value.length) return true;
-        if (filter && filter.operation === 'month') {
-          const month = parseInt(value.split('-')[1], 10);
-          return month === parseInt(filter.value, 10);
-        }
-        return IntegratedFiltering.defaultPredicate(value, filter, row);
-      },
-    },
-    {
-        columnName: 'fecha_nacimiento',
-        predicate: (value, filter, row) => {
-          if (!filter.value.length) return true;
-          if (filter && filter.operation === 'month') {
-            const month = parseInt(value.split('-')[1], 10);
-            return month === parseInt(filter.value, 10);
-          }
-          return IntegratedFiltering.defaultPredicate(value, filter, row);
-        },
-      }
   ]);
-  
-  
- 
+  const [rows, setRows] = useState([]);
+  const URL='https://secretaria-educacion.herokuapp.com/api/profesor/all';
+  const getData = async () => {
+    const  {list} = await get(URL);
+    setRows(list)
+    }
+    useMemo(()=>{
+      getData()
+     console.log("paso por aca")
+},[]);
+  const [tableColumnExtensions] = useState([
+    { columnName: 'escuelas', width: 300 },
+  ]);
+  const [sorting, getSorting] = useState([]);
+  const [editingRowIds, getEditingRowIds] = useState([]);
+  const [addedRows, setAddedRows] = useState([]);
+  const [rowChanges, setRowChanges] = useState({});
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(0);
+  const [pageSizes] = useState([5, 10, 0]);
+  const [columnOrder, setColumnOrder] = useState([]);
+  const [currencyColumns] = useState(['legajo']);
+  const [percentColumns] = useState([]);
+  const [leftFixedColumns] = useState([TableEditColumn.COLUMN_TYPE]);
+  const [totalSummaryItems] = useState([]);
+
+ /* const changeAddedRows = value => setAddedRows(
+    value.map(row => (Object.keys(row).length ? row : {
+      amount: 0,
+      discount: 0,
+      saleDate: new Date().toISOString().split('T')[0],
+      product: availableValues.product[0],
+      region: availableValues.region[0],
+      customer: availableValues.customer[0],
+    })),
+  );
+*/
+  const deleteRows = (deletedIds) => {
+    const rowsForDelete = rows.slice();
+    deletedIds.forEach((rowId) => {
+      const index = rowsForDelete.findIndex(row => row.id === rowId);
+      if (index > -1) {
+        rowsForDelete.splice(index, 1);
+      }
+    });
+    return rowsForDelete;
+  };
+
+  const commitChanges = ({ added, changed, deleted }) => {
+    let changedRows;
+    if (added) {
+      const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+      changedRows = [
+        ...rows,
+        ...added.map((row, index) => ({
+          id: startingAddedId + index,
+          ...row,
+        })),
+      ];
+    }
+    if (changed) {
+      changedRows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+    }
+    if (deleted) {
+      changedRows = deleteRows(deleted);
+    }
+    setRows(changedRows);
+  };
+
   return (
-    <>
-   
- 
     <Paper>
       <Grid
         rows={rows}
         columns={columns}
-        
+        getRowId={getRowId}
       >
-         <PagingState
-            defaultCurrentPage={0}
-            pageSize={6}
-          />
-          <SelectionState
-            selection={selection}
-            onSelectionChange={setSelection}
-          />
-          <IntegratedPaging />
-          <IntegratedSelection />
-          
-        <RowDetailState
-          expandedRowIds={expandedRowIds}
-          onExpandedRowIdsChange={setExpandedRowIds}
-        />
-
         <SortingState
           sorting={sorting}
-          onSortingChange={setSorting}
+          onSortingChange={getSorting}
         />
-         <IntegratedSorting />
-         <DataTypeProvider
-          for={dateColumns}
-          availableFilterOperations={dateFilterOperations}
+        <PagingState
+          currentPage={currentPage}
+          onCurrentPageChange={setCurrentPage}
+          pageSize={pageSize}
+          onPageSizeChange={setPageSize}
         />
-        <DataTypeProvider
-          for={currencyColumns}
-          availableFilterOperations={currencyFilterOperations}
-          editorComponent={CurrencyEditor}
+        <EditingState
+          editingRowIds={editingRowIds}
+          onEditingRowIdsChange={getEditingRowIds}
+          rowChanges={rowChanges}
+          onRowChangesChange={setRowChanges}
+          addedRows={addedRows}
+        
+          onCommitChanges={commitChanges}
         />
-        <FilteringState defaultFilters={[]} />
-        <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
+        <SummaryState
+          totalItems={totalSummaryItems}
+        />
 
-        <Table 
-        columnExtensions={tableColumnExtensions}
-        />
+        <IntegratedSorting />
+        <IntegratedPaging />
+        <IntegratedSummary />
+
+        <CurrencyTypeProvider for={currencyColumns} />
         
+
+        <DragDropProvider />
+
+        <Table
+          columnExtensions={tableColumnExtensions}
+          cellComponent={Cell}
+        />
+        <TableColumnReordering
+          order={columnOrder}
+          onOrderChange={setColumnOrder}
+        />
         <TableHeaderRow showSortingControls />
-        <TableFilterRow
-          showFilterSelector
-          iconComponent={FilterIcon}
-          messages={{ month: 'Mes igual',
-                    contains: 'Contiene' ,
-                    notContains: 'No contiene',
-                    equal:'Igual',
-                    notEqual: 'No es igual' ,
-                    endsWith:'Termina con',
-                    startsWith: 'Empieza',
-                    greaterThan: 'Mayor ',
-                    lessThan:'Menor ',
-                    lessThanOrEqual:'Menor o igual',
-                    greaterThanOrEqual:'Mayor igual'
-                     }}
+        <TableEditRow
+          cellComponent={EditCell}
         />
-        <TableRowDetail
-          contentComponent={RowDetail}
+        <TableEditColumn
+          width={170}
+          showAddCommand={!addedRows.length}
+          showEditCommand
+          showDeleteCommand
+          commandComponent={Command}
         />
-          <TableSelection showSelectAll  />
-          <PagingPanel />
-      
-         <Toolbar />
-        
-        <ExportPanel startExport={startExport}/>
+        <TableSummaryRow />
+        <TableFixedColumns
+          leftColumns={leftFixedColumns}
+        />
+        <PagingPanel
+          pageSizes={pageSizes}
+        />
       </Grid>
-      <GridExporter
-        ref={exporterRef}
-        rows={rows}
-        columns={columns}
-       
-        selection={selection}
-        sorting={sorting}
-        onSave={onSave}
-      />
-     
     </Paper>
-    </>
   );
 };
-export default Tabla2
-
