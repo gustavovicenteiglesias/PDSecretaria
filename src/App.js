@@ -13,6 +13,7 @@ import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
+import BoardReportes from "./components/board-reportes"
 import {Navbar,Nav} from 'react-bootstrap'
 import '@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css';
 class App extends Component {
@@ -68,7 +69,11 @@ class App extends Component {
             )}
 
             {currentUser && (
-              <Nav.Link href="/user">Profesor</Nav.Link>
+              <Nav.Link href="/user">Crear/Editar Profesor</Nav.Link>
+              
+            )}
+             {currentUser && (
+              <Nav.Link href="/reporte">Reportes Profesor</Nav.Link>
               
             )}
     </Nav>
@@ -99,6 +104,7 @@ class App extends Component {
             <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
+            <Route path="/reporte" component={BoardReportes} />
           </Switch>
         </div>
       </>

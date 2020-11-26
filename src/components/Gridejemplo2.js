@@ -37,83 +37,16 @@ import {
     TableColumnVisibility,
     ColumnChooser
 } from '@devexpress/dx-react-grid-material-ui';
-import TextField from '@material-ui/core/TextField';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControl from '@material-ui/core/FormControl';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import MuiGrid from '@material-ui/core/Grid';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
+
+
 //import DateFnsUtils from '@date-io/date-fns'
 import { get } from "../services/Axios1";
 import Input from '@material-ui/core/Input';
-import { withStyles,useTheme,makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import DateRange from '@material-ui/icons/DateRange';
 import * as PropTypes from 'prop-types';
 import saveAs from 'file-saver';
-import {put} from '../services/Axios1';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-/* eslint-disable no-shadow */
-import {useGetEscuelas} from '../services/Consulta';
-import { isConstructorDeclaration } from 'typescript';
-/*const save=(escuelasvalue,nombreescuelas)=>{
-  const lista=nombreescuelas;
-  for(let i=0;escuelasvalue.length;i++){
-    
-    var search=lista.find(item=>item.nombre === escuelasvalue[i].nombre)
-  }
-  return search
- 
-}
-*/
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-    maxWidth: 300,
-  },
-  chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  chip: {
-    margin: 2,
-  },
-  noLabel: {
-    marginTop: theme.spacing(3),
-  },
-}));
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-
-
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 const FilterIcon = ({ type, ...restProps }) => {
   if (type === 'month') return <DateRange {...restProps} />;
   return <TableFilterRow.Icon type={type} {...restProps} />;
@@ -182,292 +115,7 @@ row.escuelas.map((data,i)=>{
 
 );
 
-const Popup = (
-  
-  { 
-  row,
-  onChange,
-  onApplyChanges,
-  onCancelChanges,
-  open,
-  onChanges,
-  escuelas
-}) =>{
-  
-  //const [escuelas,setEscuelas]=useState([]);
-  //let escuelasvalue=[]
-  const [escuelasvalue,setEscuelasvalue]=useState([])
-  //let escuelas=[]
-  const[nombreescuelas,setNombreescuelas]=useState([]);
-  
-  const especialidades=
-  {
-    especialidad : ["Historia","Arte","Directora","Vice-directora","Maestra","Matematicas"]
-  };
-  //const [escuelasvalue,setEscuelasvalue]=useState([]);
-  
-  const getDataEsc = async () => {
-    const  {list} = await get('https://secretaria-educacion.herokuapp.com/api/escuela/all');
-    setNombreescuelas(list)
-    }
-    useMemo(()=>{
-      getDataEsc()
-     console.log("paso por aca escuelas")
-},[]);
 
-  const classes = useStyles();
-  const theme = useTheme();
-  const handleChange = (event) => {
-    //row.especialidad=event.target.value ;
-    return event.target.value
-  };
- 
-  const handleChangeEscuelas = (event) => {
-    let consulta=event.target.value
-    let contador=event.target.value.length-1
-  
-    console.log(consulta)
-    console.log(event.target.value.length+1)
-    setEscuelasvalue(event.target.value);
-    
-    const lista=nombreescuelas;
-    const search=lista.find(item=>{
-     
-        console.log('pasa por loop')
-        if(item.nombre === consulta[contador]){
-          return item
-        }
-
-     
-      
-    
-    })
-    
-    console.log('escuelasvalue')
-    console.log(escuelasvalue)
-    console.log('busqueda')
-    console.log(search)
-    escuelas.push(search)
-    //setEscuelas(escuelas);
-    onChange(
-      {target: { name:"escuelas", value:escuelas}})
-  };
- 
-
-  const handleChangeMultiple = (event) => {
-    const { options } = event.target;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
-    }
-    //setEscuelas(value);
-  };
-  
-  
-    console.log("ROWS")
-    //row.escuelas="uno"
-    console.log(row)
-    console.log(escuelas)
-    console.log(escuelasvalue)
-
-   
-
-console.log('nombre de escuela')
-console.log(nombreescuelas)
-  return (
-    
-  <Dialog open={open} onClose={onCancelChanges} aria-labelledby="form-dialog-title">
-    <DialogTitle id="form-dialog-title">Profesores</DialogTitle>
-    <DialogContent>
-      <MuiGrid container spacing={3}>
-        <MuiGrid item xs={6}>
-          <FormGroup>
-            <TextField
-              margin="normal"
-              name="nombre"
-              label="Nombre"
-              value={row.nombre || ''}
-              onChange={onChange}
-            />
-            <TextField
-            type="number"
-              margin="normal"
-              name="legajo"
-              label="Legajo"
-              value={row.legajo}
-              onChange={onChange}
-            />
-           
-            <InputLabel id="demo-simple-select-label">Especialidad</InputLabel>
-            <Select
-              labelId="Especialidad"
-              name="especialidad"
-              id="demo-simple-select"
-              value={row.especialidad || ''}
-              onChange={onChange}
-            >
-                {especialidades.especialidad.map((name) => (
-            <MenuItem key={name} value={name} >
-              {name}
-            </MenuItem>
-          ))}
-            </Select>
-          </FormGroup>
-        </MuiGrid>
-        <MuiGrid item xs={6}>
-          <FormGroup>
-            <TextField
-              margin="normal"
-              name="apellido"
-              label="Apellido"
-              value={row.apellido || ''}
-              onChange={onChange}
-            />
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <KeyboardDatePicker
-                label="Fecha Nacimiento"
-                margin="normal"
-                value={row.fecha_nacimiento}
-                onChange={(_, value) => onChange({
-                  target: { name: 'fecha_nacimiento', value },
-                })}
-                format="YYYY-MM-DD"
-              />
-            </MuiPickersUtilsProvider>
-            <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-label">Escuela</InputLabel>
-            <Select
-                labelId="Escuelas"
-                id="demo-mutiple-name"
-                name="escuelas"
-                
-                value={escuelas}
-                onChange={onChanges}
-                input={<Input />}
-                MenuProps={MenuProps}
-                values='ddddddd'
-              >
-                {nombreescuelas.map((name) => (
-                  <MenuItem key={name} value={{idEscuela:name.idEscuela,nombre:name.nombre}}
-                   style={getStyles(name, escuelasvalue, theme)}
-                   >
-                    {name.nombre}
-                  </MenuItem>
-                ))}
-        </Select>
-        </FormControl>
-          </FormGroup>
-        </MuiGrid>
-      </MuiGrid>
-    </DialogContent>
-    <DialogActions>
-      <Button onClick={onCancelChanges} color="primary">
-        Cancel
-      </Button>
-      <Button onClick={onApplyChanges} color="primary">
-        Save
-      </Button>
-    </DialogActions>
-  </Dialog>
-);
-}
-
-const PopupEditing = React.memo(({ popupComponent: Popup }) => (
-  <Plugin>
-    <Template name="popupEditing">
-      <TemplateConnector>
-        {(
-          {
-            rows,
-            getRowId,
-            addedRows,
-            editingRowIds,
-            createRowChange,
-            rowChanges,
-          },
-          {
-            changeRow, changeAddedRow, commitChangedRows, commitAddedRows,
-            stopEditRows, cancelAddedRows, cancelChangedRows,
-          },
-          
-        ) => {
-          
-          const isNew = addedRows.length > 0;
-          let escuelas=[]
-          let editedRow;
-          let rowId;
-          if (isNew) {
-            rowId = 0;
-            editedRow = addedRows[rowId];
-          } else {
-            [rowId] = editingRowIds;
-            const targetRow = rows.filter(row => getRowId(row) === rowId)[0];
-            editedRow = { ...targetRow, ...rowChanges[rowId] };
-          }
-          const processValueMultiple=({ target: { name, value } })=>{
-            
-            escuelas.push(value)
-            console.log(escuelas)
-            
-
-          }
-          const processValueChange = ({ target: { name, value } }) => {
-            const changeArgs = {
-              rowId,
-              change: createRowChange(editedRow, value, name),
-            };
-            if (isNew) {
-              changeAddedRow(changeArgs);
-            } else {
-              changeRow(changeArgs);
-            }
-          };
-          const rowIds = isNew ? [0] : editingRowIds;
-          const applyChanges = () => {
-            if (isNew) {
-              commitAddedRows({ rowIds });
-            } else {
-              stopEditRows({ rowIds });
-              commitChangedRows({ rowIds });
-             
-            }
-          };
-          const cancelChanges = () => {
-            if (isNew) {
-              cancelAddedRows({ rowIds });
-            } else {
-              stopEditRows({ rowIds });
-              cancelChangedRows({ rowIds });
-            }
-          };
-
-          const open = editingRowIds.length > 0 || isNew;
-          return (
-            <Popup
-              open={open}
-              row={editedRow}
-              onChange={processValueChange}
-              onApplyChanges={applyChanges}
-              onCancelChanges={cancelChanges}
-              onChanges={processValueMultiple}
-              escuela={escuelas}
-              
-            />
-          );
-        }}
-      </TemplateConnector>
-    </Template>
-    <Template name="root">
-      <TemplatePlaceholder />
-      <TemplatePlaceholder name="popupEditing" />
-    </Template>
-  </Plugin>
-));
-
-const getRowId = row => row.id;
-/////////////////////////////////////////////////////////////////////////////////
 export default () => {
 
   const exporterRef = useRef(null);
@@ -515,10 +163,8 @@ const [columns] = useState([
      'lessThan',
      'lessThanOrEqual',
  ]);
- const [tableColumnExtensions] = useState([
-   { columnName: 'escuelas', width: 300 },
- ]);
- let profesores;
+ 
+ 
  const [filteringColumnExtensions] = useState([
  {
    columnName: 'fechaIngreso',
@@ -543,39 +189,14 @@ const [columns] = useState([
      },
    }
 ]);
-const [hiddenColumnNames, setHiddenColumnNames] = useState(['nombre', 'apellido']);
-const commitChanges = ({ added, changed }) => {
-  let changedRows;
-  if (added) {
-    const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
-    changedRows = [
-      ...rows,
-      ...added.map((row, index) => ({
-        id: startingAddedId + index,
-        ...row,
-      })),
-    ];
-  }
-  if (changed) {
-    changedRows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
-    console.log('changed')
-    console.log(changed)
-  }
-  setRows(changedRows);
-  console.log('changedRow')
-  console.log(changedRows)
-};
-  
-  useEffect(()=>{
- 
-   console.log("paso por aca useEffect")
-},[rows]);
+const [hiddenColumnNames, setHiddenColumnNames] = useState(['fechaIngreso','fecha_nacimiento','especialidad']);
+
   return (
     <Paper>
       <Grid
         rows={rows}
         columns={columns}
-        getRowId={getRowId}
+        
       >
         <PagingState
             defaultCurrentPage={0}
@@ -609,16 +230,11 @@ const commitChanges = ({ added, changed }) => {
         />
         <FilteringState defaultFilters={[]} />
         <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
-        <EditingState
-          onCommitChanges={commitChanges}
-        />
+       
         <Table />
         <TableHeaderRow />
 
-        <TableEditColumn
-          showAddCommand
-          showEditCommand
-        />
+      
  <TableFilterRow
           showFilterSelector
           iconComponent={FilterIcon}
@@ -649,7 +265,7 @@ const commitChanges = ({ added, changed }) => {
          <ColumnChooser />
         <ExportPanel startExport={startExport}/>
 
-        <PopupEditing popupComponent={Popup} />
+       
       </Grid>
       <GridExporter
         ref={exporterRef}

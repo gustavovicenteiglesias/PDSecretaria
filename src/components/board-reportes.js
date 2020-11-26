@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import Grilla from './Gridejemplo';
 import Grilla1 from './Gridejemplo1';
-import Grilla2 from './TablaAbono'
+import Grilla2 from './Gridejemplo2'
 import UserService from "../services/user.service";
 import Tabla from './Tabla'
-export default class BoardUser extends Component {
+export default class BoardReportes extends Component {
   constructor(props) {
     super(props);
 
