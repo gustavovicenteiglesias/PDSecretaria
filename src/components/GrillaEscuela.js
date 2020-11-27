@@ -17,12 +17,13 @@ import { EditingState ,
   IntegratedPaging,
   IntegratedSelection,
 } from '@devexpress/dx-react-grid';
+
 import { GridExporter } from '@devexpress/dx-react-grid-export';  
 import {
   Grid,
   Table,
   TableHeaderRow,
-  TableEditColumn,
+  
   TableGroupRow,
     GroupingPanel,
     TableSummaryRow,
@@ -236,6 +237,7 @@ const [hiddenColumnNames, setHiddenColumnNames] = useState([]);
           <PagingPanel />
       
          <Toolbar />
+         <h4>Escuelas</h4>
          <ColumnChooser />
         <ExportPanel startExport={startExport}/>
 

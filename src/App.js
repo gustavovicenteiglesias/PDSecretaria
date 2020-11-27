@@ -31,6 +31,9 @@ class App extends Component {
   }
 
   componentDidMount() {
+    
+      document.title = "Educacion"
+    
     const user = AuthService.getCurrentUser();
 
     if (user) {
@@ -53,7 +56,7 @@ class App extends Component {
       
         <>
         <Navbar collapseOnSelect expand="lg" className="bg-color" variant="light">
-        <Navbar.Brand href="#home">Secretaria de Educación </Navbar.Brand>
+        <Navbar.Brand href="#home">Dirección de Educación </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">

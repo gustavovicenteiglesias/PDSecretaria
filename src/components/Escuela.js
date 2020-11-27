@@ -225,7 +225,7 @@ class Escuela extends React.Component {
    
   const lista=this.state.listEscuela;
   var search=lista.filter(item=>{
-    if(item.idEscuela.toString().includes(this.state.busqueda)//||
+    if(item.nombre.toString().includes(this.state.busqueda)//||
       // item.nombre.includes(this.state.busqueda)//||
        //item.idEmpresa.nombre.includes(this.state.busqueda)||
        //item.idTecnico.nombre.toLowerCase().includes(this.state.busqueda)||
@@ -243,7 +243,7 @@ class Escuela extends React.Component {
   
   async componentDidMount(){
 
-    this.setState({listBusquedaProfesor:this.state.listProfesor});
+    this.setState({listBusquedaEscuela:this.state.listEscuela});
     console.log("Mounted List");
     const res = await get('https://secretaria-educacion.herokuapp.com/api/escuela/all')
     console.log(res);
@@ -294,27 +294,28 @@ class Escuela extends React.Component {
                 <CardHeader>
                   
                   <div class="row ">
-                  <div class="form-group col-md-4 ">
+                  <div class="form-group col-md-6 ">
                   <CardTitle tag="h4">Escuela</CardTitle>
                   </div>
-                    <div class="form-group col-md-4 ">
+                    <div class="form-group col-md-6 ">
                     <Busqueda searchBusqueda={this.valorSearchEmpresa}/>
-                            </div>
-                  <div class="form-group col-md-4  ">
-                    <Button  onClick={this.setModalCrear}  size="lg">
-                    <i class="fas fa-plus" onClick={this.setModalCrear}></i>
-                    </Button>
                     </div>
-                    </div>
+                   </div>
                 </CardHeader>
                 <CardBody>
                   <Table className="tablesorter" responsive>
-                    <thead className="text-primary">
+                    <thead className="text-secondary">
                       <tr>
                         <th>Nombre</th>
                         <th>Diegep</th>
                         <th>Suvencion</th>
-                       
+                        <th>
+                        <div class=" ml-2">
+                         <a class="btn-icon active text-secondary ml-4" href={this.setModalCrear} onClick={this.setModalCrear} >
+                        <i class="fas fa-plus fa-lg "></i>
+                       </a>  
+                        </div>  
+                       </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -322,31 +323,23 @@ class Escuela extends React.Component {
               this.state.listBusquedaEscuela.map((data,i)=>{
                 return(
                   <tr>
-                    <th scope="row">{data.nombre}</th>
+                    <td >{data.nombre}</td>
                     <td>{data.diegep}</td>
                     <td>{data.suvencion}</td>
                     
                     <td>
-                           <Button className="btn-icon" color="info" size="sm"
-                           onClick={()=>{this.setAbono(data,'Ver')}} 
-                        href="#">
-                          <i className="fas fa-eye" />
-                          </Button>{` `}
-                           
-                         <Button  className="btn-icon" color="success" size="sm"
-                          onClick={()=>{this.setAbono(data,'Editar')}} 
-                         >
-                          <i className="fas fa-pencil-alt"></i>
-                         </Button>{` `}
+                    <a class="btn-icon active text-info ml-2" href={()=>{this.setAbono(data,'Ver')}} onClick={()=>{this.setAbono(data,'Ver')}} >
+                      <i class="fas fa-eye  "></i>
+                      </a> {` `} {` `}
+                         
+                      <a class="btn-icon active text-success ml-2 " href={()=>{this.setAbono(data,'Editar')}} onClick={()=>{this.setAbono(data,'Editar')}} >
+                      <i class="fas fa-pencil-alt  "></i>
+                      </a> {` `} {'  '}
 
-                          <Button className="btn-icon" color="danger" size="sm" 
-                        href="#" onClick={()=>this.setIdDelete(i,data.idEscuela)}>
-                          <i className="fas fa-trash-alt" />
-                          </Button>{'  '}
-
-                          
-                      
-                    </td>
+                      <a class="btn-icon active text-danger ml-2" href={()=>this.setIdDelete(i,data.idEscuela)} onClick={()=>this.setIdDelete(i,data.idEscuela)} >
+                      <i class="fas fa-trash-alt "></i>
+                      </a> {` `}  {'  '}
+                        </td>
                   </tr>
                 )
               })

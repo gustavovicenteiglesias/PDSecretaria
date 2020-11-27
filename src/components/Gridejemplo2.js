@@ -262,6 +262,7 @@ const [hiddenColumnNames, setHiddenColumnNames] = useState(['fechaIngreso','fech
           <PagingPanel />
       
          <Toolbar />
+         <h4>Profesores</h4>
          <ColumnChooser />
         <ExportPanel startExport={startExport}/>
 
