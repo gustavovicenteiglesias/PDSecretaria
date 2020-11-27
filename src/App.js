@@ -65,10 +65,7 @@ class App extends Component {
               
             )}
 
-            {showAdminBoard && (
-              <Nav.Link href="/admin">Admin</Nav.Link>
-              
-            )}
+            
 
             {showAdminBoard && (
               <Nav.Link href="/user">Crear/Editar Profesor</Nav.Link>
@@ -92,8 +89,7 @@ class App extends Component {
            
           {currentUser ? (
               <Nav>
-                {showAdminBoard && (
-              <Nav.Link href="/profile">{currentUser.username}</Nav.Link>)}
+              <Nav.Link href="/profile">{currentUser.username}</Nav.Link>
               <Nav.Link href="/login" onClick={this.logOut}>LogOut</Nav.Link>
               </Nav>
           ) : (
