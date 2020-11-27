@@ -234,16 +234,17 @@ class TablesAbono extends React.Component {
     const urlDelete='https://secretaria-educacion.herokuapp.com/api/profesor/delete/'+id;
     if (yes === true){ 
       
-      delet(urlDelete)
+      await delet(urlDelete)
       
       
-        this.resetLista();
+       
         const list =this.state.listBusquedaProfesor
         list.splice(i,1)
          this.setState((state)=>({listBusquedaProfesor:list,
                       modalEliminar:false
         }))
-     
+        this.resetLista();
+        this.filtrarElementos();
     }
   }
 

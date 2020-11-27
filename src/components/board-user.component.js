@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Grilla from './Gridejemplo';
-import Grilla1 from './Gridejemplo1';
+
 import Grilla2 from './TablaAbono'
 import UserService from "../services/user.service";
 import Tabla from './Tabla'
