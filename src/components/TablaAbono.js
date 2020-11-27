@@ -434,7 +434,7 @@ class TablesAbono extends React.Component {
                       <i class="fas fa-pencil-alt  "></i>
                       </a> {` `} {'  '}
 
-                      <a class="btn-icon active text-danger ml-2" href={()=>this.setIdDelete(i,data.id)} onClick={()=>this.setIdDelete(i,data.idEscuela)} >
+                      <a class="btn-icon active text-danger ml-2" href={()=>this.setIdDelete(i,data.id)} onClick={()=>this.setIdDelete(i,data.id)} >
                       <i class="fas fa-trash-alt "></i>
                       </a> {` `}  {'  '}
                     </td>
