@@ -186,17 +186,41 @@ class TablesAbono extends React.Component {
 
   async onClickSave()
   {
-    //const res = await abonoServices.create(this.state)
-    //if (res.success) {
-     // alert(res.message)
-    //  this.setState({modalCrear:false});
-      
-   // }
-   // else {
-   //   alert("Error ==>"+res.message.message)
-  //  }
-  //  this.resetLista();
-     // this.filtrarElementos();
+    const urlUpdate='https://secretaria-educacion.herokuapp.com/api/profesor/create/';
+    let paramUpdate;
+      if(this.state.escuelas === null){
+        paramUpdate={
+          id:0,
+          nombre: this.state.nombre,
+          apellido: this.state.apellido,
+          legajo: this.state.legajo,
+          especialidad: this.state.especialidad,
+          fechaIngreso: this.state.fechaIngreso,
+          fecha_nacimiento:this.state.fecha_nacimiento,
+          titulo_habilitante:this.state.titulo_habilitante,
+          antiguedad:this.state.antiguedad,
+         
+        }
+      }else{
+        
+         paramUpdate={
+          id:0,
+          nombre: this.state.nombre,
+          apellido: this.state.apellido,
+          legajo: this.state.legajo,
+          especialidad: this.state.especialidad,
+          fechaIngreso: this.state.fechaIngreso,
+          fecha_nacimiento:this.state.fecha_nacimiento,
+          titulo_habilitante:this.state.titulo_habilitante,
+          antiguedad:this.state.antiguedad,
+          escuelas:this.state.escuelas.map((data)=>{return {idEscuela:data.idEscuela,nombre: data.value
+            , diegep: data.diegep, suvencion:data.suvencion}}) ,
+        }
+      }
+    await put(urlUpdate,paramUpdate);
+    this.setState({modalCrear:false});
+    this.resetLista();
+    this.filtrarElementos();
   }
 
 
@@ -531,6 +555,7 @@ class TablesAbono extends React.Component {
                     <div class="form-group col-md-4 ">
                       <Label for="exampleSelectMulti">Escuelas</Label>
                       <Select
+                          readOnly={editarModal}
                           isMulti
                           options={options}
                           value={this.state.escuelas}
@@ -594,6 +619,152 @@ class TablesAbono extends React.Component {
                   </button>
                 </ModalFooter>
               </Modal>
+
+              <Modal  isOpen={this.state.modalCrear} toggle={this.setModalCrear} size="lg" >
+                <div className="modal-header">
+                  <h3 className="modal-title" id="exampleModalLabel">
+                   Profesor
+                  </h3>
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="modal"
+                    aria-hidden="true"
+                    onClick={this.setModalCrear}
+                  >
+                    <i className="tim-icons icon-simple-remove" />
+                  </button>
+                </div>
+                <ModalBody >
+                <div class="border border-info my-2 p-2"> 
+                    <div class="row ">
+                    <div class="form-group col-md-4  ">
+                     <label>Nombre</label>
+                      <input
+                        className="form-control bg-white text-dark "
+                        
+                        type="text"
+                        name="nombre"
+                        value={this.state.nombre}
+                        onChange={(value)=>this.setState({nombre:value.target.value})}
+                      /> 
+                      </div> 
+                    <div class="form-group col-md-4 ">
+                     <label>Apellido</label>
+                      <input
+                        className="form-control bg-white text-dark "
+                       
+                        type="text"
+                        name="apellido"
+                        value={this.state.apellido}
+                        onChange={(value)=>this.setState({apellido:value.target.value})}
+                      /> 
+                      </div> 
+                      <div class="form-group col-md-4 ">
+                      <label>Cargo</label>
+                      <Input
+                        className="form-control bg-white text-dark "
+                        
+                        type="select"
+                        name="especialidad"
+                        value={this.state.especialidad}
+                        onChange={(value)=>this.setState({especialidad:value.target.value})}
+                      > 
+                      <option value="Matematicas">Matematicas</option>
+                      <option value="Historia">Historia</option>
+                      <option value="Arte">Arte</option>
+                      </Input>
+                      </div>
+                    </div> 
+
+                    <div class="row ">
+                    <div class="form-group col-md-4 ">
+                     <label>Fecha Ingreso</label>
+                      <input
+                        className="form-control bg-white text-dark "
+                        
+                        type="date"
+                        name="fechaIngreso"
+                        value={this.state.fechaIngreso}
+                        onChange={(value)=>this.setState({fechaIngreso:value.target.value})}
+                      /> 
+                      </div> 
+                    <div class="form-group col-md-4 ">
+                     <label>Fecha Nacimiento </label>
+                      <input
+                        className="form-control bg-white text-dark"
+                        
+                        type="date"
+                        name="fecha_nacimiento"
+                        value={this.state.fecha_nacimiento}
+                        onChange={(value)=>this.setState({fecha_nacimiento:value.target.value})}
+                      /> 
+                      </div> 
+                      <div class="form-group col-md-4 ">
+                      <label>Legajo</label>
+                      <input
+                        className="form-control bg-white text-dark"
+                       
+                        type="number"
+                        name="legajo"
+                        value={this.state.legajo}
+                        onChange={(value)=>this.setState({legajo:value.target.value})}
+                      /> 
+                      </div>
+                    </div> 
+                    </div> 
+                    <div class="border border-info my-2 p-2"> 
+                <div class="row ">
+                    <div class="form-group col-md-4 ">
+                      <Label for="exampleSelectMulti">Escuelas</Label>
+                      <Select
+                          isMulti
+                          options={options}
+                          value={this.state.escuelas}
+                          onChange={this.handleChange}
+                          closeMenuOnSelect={false}
+                        />
+                    </div>
+                      <div class="form-group col-md-4 ">
+                      <label>Antiguedad</label>
+                      <input
+                        className="form-control bg-white text-dark"
+                      
+                        type="number"
+                        name="antiguedad"
+                        value={this.state.antiguedad}
+                        onChange={(value)=>this.setState({antiguedad:value.target.value})}
+                      /> 
+                      </div>
+                      <div class="form-group col-md-4 ">
+                      <label>Titulo Habilitante</label>
+                      <Input
+                        className="form-control bg-white text-dark "
+                        
+                        type="select"
+                        name="titulo_habilitante"
+                        value={this.state.titulo_habilitante}
+                        onChange={(value)=>this.setState({titulo_habilitante:value.target.value})}
+                      > 
+                      <option value="Si">Si</option>
+                      <option value="No">No</option>
+                      
+                      </Input>
+                      </div>
+                    </div> 
+                    </div>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="secondary" onClick={this.setModalCrear}>
+                        Cerrar
+                    </Button>
+                    <Button color="warning" 
+                    onClick={()=>this.onClickSave()}>
+                        Guardar
+                    </Button>
+                   
+                </ModalFooter>
+            </Modal> 
           </>
     )
   }
