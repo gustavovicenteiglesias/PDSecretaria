@@ -599,7 +599,7 @@ class TablesAbono extends React.Component {
             </Modal> 
             <Modal isOpen={this.state.modalEliminar} toggle={this.setModalEliminar}>
                 <ModalBody>
-                  Estás Seguro que deseas eliminar Abono
+                  Estás Seguro que deseas eliminar Profesor
                 </ModalBody>
                 <ModalFooter>
                   <button className="btn btn-danger" onClick={()=>this.onClickDelete()}>

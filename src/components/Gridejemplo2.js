@@ -118,18 +118,7 @@ row.escuelas.map((data,i)=>{
 
 export default () => {
 
-  const exporterRef = useRef(null);
 
-  const startExport = useCallback(() => {
-    exporterRef.current.exportGrid();
-  }, [exporterRef]);
-  const [selection, setSelection] = useState([]);
-     
-      const onSave = (workbook) => {
-        workbook.xlsx.writeBuffer().then((buffer) => {
-          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
-        });
-      };
 
   const URL='https://secretaria-educacion.herokuapp.com/api/profesor/all';
   const [rows,setRows] = useState([]);
@@ -190,7 +179,18 @@ const [columns] = useState([
    }
 ]);
 const [hiddenColumnNames, setHiddenColumnNames] = useState(['fechaIngreso','fecha_nacimiento','especialidad']);
+const exporterRef = useRef(null);
 
+const startExport = useCallback(() => {
+  exporterRef.current.exportGrid();
+}, [exporterRef]);
+const [selection, setSelection] = useState([]);
+   
+    const onSave = (workbook) => {
+      workbook.xlsx.writeBuffer().then((buffer) => {
+        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
+      });
+    };
   return (
     <Paper>
       <Grid
@@ -274,7 +274,7 @@ const [hiddenColumnNames, setHiddenColumnNames] = useState(['fechaIngreso','fech
         columns={columns}
        
         selection={selection}
-        sorting={sorting}
+        
         onSave={onSave}
       />
     </Paper>
