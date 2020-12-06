@@ -4,7 +4,7 @@ import { get,put,delet} from "../services/Axios1";
 import Busqueda from "./Busqueda";
 
 
-
+import ReactTooltip from "react-tooltip";
 
 // reactstrap components
 import {
@@ -295,7 +295,7 @@ class Escuela extends React.Component {
                   
                   <div class="row ">
                   <div class="form-group col-md-6 ">
-                  <CardTitle tag="h4">Escuela</CardTitle>
+                  <CardTitle tag="h4">Escuelas</CardTitle>
                   </div>
                     <div class="form-group col-md-6 ">
                     <Busqueda searchBusqueda={this.valorSearchEmpresa}/>
@@ -311,9 +311,14 @@ class Escuela extends React.Component {
                         <th>Suvencion</th>
                         <th>
                         <div class=" ml-2">
-                         <a class="btn-icon active text-secondary ml-4" href={this.setModalCrear} onClick={this.setModalCrear} >
+                         <a data-tip data-for="nuevo"
+                         class="btn-icon active text-secondary ml-4" href={this.setModalCrear} onClick={this.setModalCrear} >
                         <i class="fas fa-plus fa-lg "></i>
-                       </a>  
+                       </a>
+                       <ReactTooltip id="nuevo" place="top" effect="solid">
+                        Nuevo
+                      </ReactTooltip> 
+
                         </div>  
                        </th>
                       </tr>
@@ -328,17 +333,30 @@ class Escuela extends React.Component {
                     <td>{data.suvencion}</td>
                     
                     <td>
-                    <a class="btn-icon active text-info ml-2" href={()=>{this.setAbono(data,'Ver')}} onClick={()=>{this.setAbono(data,'Ver')}} >
+                    <a data-tip data-for="vermas"
+                    class="btn-icon active text-info ml-2" href={()=>{this.setAbono(data,'Ver')}} onClick={()=>{this.setAbono(data,'Ver')}} >
                       <i class="fas fa-eye  "></i>
                       </a> {` `} {` `}
-                         
-                      <a class="btn-icon active text-success ml-2 " href={()=>{this.setAbono(data,'Editar')}} onClick={()=>{this.setAbono(data,'Editar')}} >
+                      <ReactTooltip id="vermas" place="top" effect="solid">
+                        Ver más
+                      </ReactTooltip> 
+
+                      <a  data-tip data-for="editar"
+                       class="btn-icon active text-success ml-2 " href={()=>{this.setAbono(data,'Editar')}} onClick={()=>{this.setAbono(data,'Editar')}} >
                       <i class="fas fa-pencil-alt  "></i>
                       </a> {` `} {'  '}
+                      <ReactTooltip id="editar" place="top" effect="solid">
+                        Editar
+                      </ReactTooltip>
 
-                      <a class="btn-icon active text-danger ml-2" href={()=>this.setIdDelete(i,data.idEscuela)} onClick={()=>this.setIdDelete(i,data.idEscuela)} >
+                      <a  data-tip data-for="borrar"
+                       class="btn-icon active text-danger ml-2" href={()=>this.setIdDelete(i,data.idEscuela)} onClick={()=>this.setIdDelete(i,data.idEscuela)} >
                       <i class="fas fa-trash-alt "></i>
                       </a> {` `}  {'  '}
+                      <ReactTooltip id="borrar" place="top" effect="solid">
+                        Borrar
+                      </ReactTooltip>
+
                         </td>
                   </tr>
                 )

@@ -132,8 +132,13 @@ export default () => {
 },[]);
 const [columns] = useState([
   { name: 'legajo', title: 'Legajo' },
+  { name: 'dni', title: 'DNI' },
   { name: 'nombre', title: 'Nombre' },
   { name: 'apellido', title: 'Apellido' },
+  { name: 'calle', title: 'Calle' },
+  { name: 'numero', title: 'Número' },
+  { name: 'localidad', title: 'Localidad' },
+  { name: 'codigopostal', title: 'Codigo Postal' },
   { name: 'fechaIngreso', title: 'Fecha Ingreso' },
   { name: 'fecha_nacimiento', title: 'Fecha Nacimiento' },
   { name: 'especialidad', title: 'Especialidad' },
@@ -143,7 +148,7 @@ const [columns] = useState([
  const [sorting, setSorting] = useState([{ columnName: 'nombre', direction: 'asc' }]);
  const [dateColumns] = useState(['fechaIngreso','fecha_nacimiento']);
  const [dateFilterOperations] = useState(['month', 'contains', 'startsWith', 'endsWith']);
- const [currencyColumns] = useState(['legajo']);
+ const [currencyColumns] = useState(['legajo','dni']);
  const [currencyFilterOperations] = useState([
      'equal',
      'notEqual',
@@ -178,7 +183,8 @@ const [columns] = useState([
      },
    }
 ]);
-const [hiddenColumnNames, setHiddenColumnNames] = useState(['fechaIngreso','fecha_nacimiento','especialidad']);
+const [hiddenColumnNames, setHiddenColumnNames] = 
+useState(['legajo','fechaIngreso','fecha_nacimiento','especialidad','calle','numero','codigopostal','localidad']);
 const exporterRef = useRef(null);
 
 const startExport = useCallback(() => {
@@ -263,8 +269,14 @@ const [selection, setSelection] = useState([]);
       
          <Toolbar />
          <h4>Profesores</h4>
-         <ColumnChooser />
-        <ExportPanel startExport={startExport}/>
+         <ColumnChooser messages={{showColumnChooser:"Ver columnas"}} />
+        <ExportPanel 
+        messages={{
+          showExportMenu:"Exportar",
+          exportAll:"Exportar todo",
+          exportSelected:"Exportar seleccíon" 
+        }}
+        startExport={startExport}/>
 
        
       </Grid>

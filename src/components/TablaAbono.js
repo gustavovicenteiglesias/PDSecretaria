@@ -4,7 +4,7 @@ import { get,put,delet} from "../services/Axios1";
 import Busqueda from "./Busqueda";
 import Select from "react-select";
 
-
+import ReactTooltip from "react-tooltip";
 
 // reactstrap components
 import {
@@ -39,6 +39,7 @@ class TablesAbono extends React.Component {
     this.setModalCrear=this.setModalCrear.bind(this);
      this.setEmpresa=this.setEmpresa.bind(this);
     this.setTecnico=this.setTecnico.bind(this);
+    
     this.escuela=[];
 
     this.state = {
@@ -55,6 +56,11 @@ class TablesAbono extends React.Component {
           fecha_nacimiento:"",
           titulo_habilitante:'',
           antiguedad:'',
+          dni:'',
+          calle:'',
+          numero:'',
+          localidad:'',
+          codigopostal:'',
           escuelas:null,
           idEmpresa:{},
           idTecnico:{},
@@ -65,6 +71,7 @@ class TablesAbono extends React.Component {
     }
     
   }
+ 
   handleChange = escuelas => {
     this.setState({ escuelas });
     // Option selected: { value: "rojo", label: "rojo" }
@@ -130,6 +137,11 @@ class TablesAbono extends React.Component {
                     
           titulo_habilitante:elemento.titulo_habilitante,
           antiguedad:elemento.antiguedad,
+          dni:elemento.dni,
+          calle:elemento.calle,
+          numero:elemento.numero,
+          localidad:elemento.localidad,
+          codigopostal:elemento.codigopostal,
           ie:'',
           ide:'',
           busqueda:'',
@@ -144,13 +156,18 @@ class TablesAbono extends React.Component {
           id:"",
           nombre: "",
           apellido: "",
-          legajo: "",
+          legajo: 0,
           especialidad: "",
           fechaIngreso: "",
           fecha_nacimiento:"",
           escuelas:'',
           titulo_habilitante:'',
           antiguedad:'',
+          dni:'',
+          calle:'',
+          numero:'',
+          localidad:'',
+          codigopostal:'',
           busqueda:"",
           modalCrear:!this.state.modalCrear,
     });
@@ -199,6 +216,11 @@ class TablesAbono extends React.Component {
           fecha_nacimiento:this.state.fecha_nacimiento,
           titulo_habilitante:this.state.titulo_habilitante,
           antiguedad:this.state.antiguedad,
+          dni:this.state.dni,
+          calle:this.state.calle,
+          numero:this.state.numero,
+          localidad:this.state.localidad,
+          codigopostal:this.state.codigopostal,
          
         }
       }else{
@@ -213,6 +235,11 @@ class TablesAbono extends React.Component {
           fecha_nacimiento:this.state.fecha_nacimiento,
           titulo_habilitante:this.state.titulo_habilitante,
           antiguedad:this.state.antiguedad,
+          dni:this.state.dni,
+          calle:this.state.calle,
+          numero:this.state.numero,
+          localidad:this.state.localidad,
+          codigopostal:this.state.codigopostal,
           escuelas:this.state.escuelas.map((data)=>{return {idEscuela:data.idEscuela,nombre: data.value
             , diegep: data.diegep, suvencion:data.suvencion}}) ,
         }
@@ -269,6 +296,11 @@ class TablesAbono extends React.Component {
           fecha_nacimiento:this.state.fecha_nacimiento,
           titulo_habilitante:this.state.titulo_habilitante,
           antiguedad:this.state.antiguedad,
+          dni:this.state.dni,
+          calle:this.state.calle,
+          numero:this.state.numero,
+          localidad:this.state.localidad,
+          codigopostal:this.state.codigopostal,
          
         }
       }else{
@@ -283,6 +315,11 @@ class TablesAbono extends React.Component {
           fecha_nacimiento:this.state.fecha_nacimiento,
           titulo_habilitante:this.state.titulo_habilitante,
           antiguedad:this.state.antiguedad,
+          dni:this.state.dni,
+          calle:this.state.calle,
+          numero:this.state.numero,
+          localidad:this.state.localidad,
+          codigopostal:this.state.codigopostal,
           escuelas:this.state.escuelas.map((data)=>{return {idEscuela:data.idEscuela,nombre: data.value
             , diegep: data.diegep, suvencion:data.suvencion}}) ,
         }
@@ -367,7 +404,7 @@ class TablesAbono extends React.Component {
   
   }
 
-  
+ 
 
 
   render() 
@@ -393,7 +430,7 @@ class TablesAbono extends React.Component {
                   
                   <div class="row ">
                   <div class="form-group col-md-6 ">
-                  <CardTitle tag="h4">Profesor</CardTitle>
+                  <CardTitle tag="h4">Profesores</CardTitle>
                   </div>
                     <div class="form-group col-md-6 ">
                     <Busqueda searchBusqueda={this.valorSearchEmpresa}/>
@@ -409,9 +446,13 @@ class TablesAbono extends React.Component {
                         <th>Nombre</th>
                         <th>Apellido</th>
                         <th class=" ml-2">
-                        <a class="btn-icon active text-secondary ml-4" href={this.setModalCrear} onClick={this.setModalCrear} >
+                        <a  data-tip data-for="nuevo"
+                         class="btn-icon active text-secondary ml-4" href={this.setModalCrear} onClick={this.setModalCrear} >
                         <i class="fas fa-plus fa-lg "></i>
-                       </a>  
+                       </a>
+                       <ReactTooltip id="nuevo" place="top" effect="solid">
+                        Nuevo
+                      </ReactTooltip> 
                         
                        </th>
                       </tr>
@@ -426,17 +467,29 @@ class TablesAbono extends React.Component {
                     <td>{data.apellido}</td>
                     
                     <td>
-                    <a class="btn-icon active text-info ml-2" href={()=>{this.setAbono(data,'Ver')}} onClick={()=>{this.setAbono(data,'Ver')}} >
+                    <a data-tip data-for="vermas"
+                    class="btn-icon active text-info ml-2" href={()=>{this.setAbono(data,'Ver')}} onClick={()=>{this.setAbono(data,'Ver')}} >
                       <i class="fas fa-eye  "></i>
                       </a> {` `} {` `}
+                      <ReactTooltip id="vermas" place="top" effect="solid">
+                        Ver más
+                      </ReactTooltip>
                          
-                      <a class="btn-icon active text-success ml-2 " href={()=>{this.setAbono(data,'Editar')}} onClick={()=>{this.setAbono(data,'Editar')}} >
+                      <a data-tip data-for="editar"
+                      class="btn-icon active text-success ml-2 " href={()=>{this.setAbono(data,'Editar')}} onClick={()=>{this.setAbono(data,'Editar')}} >
                       <i class="fas fa-pencil-alt  "></i>
                       </a> {` `} {'  '}
-
-                      <a class="btn-icon active text-danger ml-2" href={()=>this.setIdDelete(i,data.id)} onClick={()=>this.setIdDelete(i,data.id)} >
+                      <ReactTooltip id="editar" place="top" effect="solid">
+                        Editar
+                      </ReactTooltip>
+                      
+                      <a data-tip data-for="borrar"
+                      class="btn-icon active text-danger ml-2" href={()=>this.setIdDelete(i,data.id)} onClick={()=>this.setIdDelete(i,data.id)}>
                       <i class="fas fa-trash-alt "></i>
                       </a> {` `}  {'  '}
+                      <ReactTooltip id="borrar" place="top" effect="solid">
+                        Borrar
+                      </ReactTooltip>
                     </td>
                   </tr>
                 )
@@ -469,7 +522,29 @@ class TablesAbono extends React.Component {
                 <ModalBody >
                 <div class="border border-info my-2 p-2"> 
                     <div class="row ">
-                    <div class="form-group col-md-4  ">
+                    <div class="form-group col-md-3  ">
+                     <label>DNI</label>
+                      <input
+                        className="form-control bg-white text-dark "
+                        readOnly={editarModal}
+                        type="number"
+                        name="dni"
+                        value={this.state.dni}
+                        onChange={(value)=>this.setState({dni:value.target.value})}
+                      /> 
+                      </div> 
+                      <div class="form-group col-md-3 ">
+                     <label>Legajo</label>
+                      <input
+                        className="form-control bg-white text-dark "
+                        readOnly={editarModal}
+                        type="number"
+                        name="legajo"
+                        value={this.state.legajo}
+                        onChange={(value)=>this.setState({legajo:value.target.value})}
+                      /> 
+                      </div>   
+                    <div class="form-group col-md-3  ">
                      <label>Nombre</label>
                       <input
                         className="form-control bg-white text-dark "
@@ -480,7 +555,7 @@ class TablesAbono extends React.Component {
                         onChange={(value)=>this.setState({nombre:value.target.value})}
                       /> 
                       </div> 
-                    <div class="form-group col-md-4 ">
+                    <div class="form-group col-md-3 ">
                      <label>Apellido</label>
                       <input
                         className="form-control bg-white text-dark "
@@ -491,23 +566,54 @@ class TablesAbono extends React.Component {
                         onChange={(value)=>this.setState({apellido:value.target.value})}
                       /> 
                       </div> 
-                      <div class="form-group col-md-4 ">
-                      <label>Cargo</label>
-                      <Input
+                     </div> 
+
+                    <div class="row ">
+                    <div class="form-group col-md-3 ">
+                     <label>Calle</label>
+                      <input
                         className="form-control bg-white text-dark "
                         readOnly={editarModal}
-                        type="select"
-                        name="especialidad"
-                        value={this.state.especialidad}
-                        onChange={(value)=>this.setState({especialidad:value.target.value})}
-                      > 
-                      <option value="Matematicas">Matematicas</option>
-                      <option value="Historia">Historia</option>
-                      <option value="Arte">Arte</option>
-                      </Input>
+                        type="text"
+                        name="calle"
+                        value={this.state.calle}
+                        onChange={(value)=>this.setState({calle:value.target.value})}
+                      /> 
+                      </div> 
+                    <div class="form-group col-md-3 ">
+                     <label>Numero </label>
+                      <input
+                        className="form-control bg-white text-dark"
+                        readOnly={editarModal}
+                        type="text"
+                        name="numero"
+                        value={this.state.numero}
+                        onChange={(value)=>this.setState({numero:value.target.value})}
+                      /> 
+                      </div> 
+                      <div class="form-group col-md-3 ">
+                      <label>Localidad</label>
+                      <input
+                        className="form-control bg-white text-dark"
+                        readOnly={editarModal}
+                        type="text"
+                        name="localidad"
+                        value={this.state.localidad}
+                        onChange={(value)=>this.setState({localidad:value.target.value})}
+                      /> 
+                      </div>
+                      <div class="form-group col-md-3 ">
+                      <label>Cod Postal</label>
+                      <input
+                        className="form-control bg-white text-dark"
+                        readOnly={editarModal}
+                        type="number"
+                        name="codigopostal"
+                        value={this.state.codigopostal}
+                        onChange={(value)=>this.setState({codigopostal:value.target.value})}
+                      /> 
                       </div>
                     </div> 
-
                     <div class="row ">
                     <div class="form-group col-md-4 ">
                      <label>Fecha Ingreso</label>
@@ -532,15 +638,19 @@ class TablesAbono extends React.Component {
                       /> 
                       </div> 
                       <div class="form-group col-md-4 ">
-                      <label>Legajo</label>
-                      <input
-                        className="form-control bg-white text-dark"
+                      <label>Cargo</label>
+                      <Input
+                        className="form-control bg-white text-dark "
                         readOnly={editarModal}
-                        type="number"
-                        name="legajo"
-                        value={this.state.legajo}
-                        onChange={(value)=>this.setState({legajo:value.target.value})}
-                      /> 
+                        type="select"
+                        name="especialidad"
+                        value={this.state.especialidad}
+                        onChange={(value)=>this.setState({especialidad:value.target.value})}
+                      > 
+                      <option value="Matematicas">Matematicas</option>
+                      <option value="Historia">Historia</option>
+                      <option value="Arte">Arte</option>
+                      </Input>
                       </div>
                     </div> 
                     </div> 
@@ -632,7 +742,29 @@ class TablesAbono extends React.Component {
                 <ModalBody >
                 <div class="border border-info my-2 p-2"> 
                     <div class="row ">
-                    <div class="form-group col-md-4  ">
+                    <div class="form-group col-md-3  ">
+                     <label>DNI</label>
+                      <input
+                        className="form-control bg-white text-dark "
+                        
+                        type="number"
+                        name="dni"
+                        value={this.state.dni}
+                        onChange={(value)=>this.setState({dni:value.target.value})}
+                      /> 
+                      </div> 
+                      <div class="form-group col-md-3 ">
+                     <label>Legajo</label>
+                      <input
+                        className="form-control bg-white text-dark "
+                        readOnly={editarModal}
+                        type="number"
+                        name="legajo"
+                        value={this.state.legajo}
+                        onChange={(value)=>this.setState({legajo:value.target.value})}
+                      /> 
+                      </div> 
+                    <div class="form-group col-md-3  ">
                      <label>Nombre</label>
                       <input
                         className="form-control bg-white text-dark "
@@ -643,34 +775,65 @@ class TablesAbono extends React.Component {
                         onChange={(value)=>this.setState({nombre:value.target.value})}
                       /> 
                       </div> 
-                    <div class="form-group col-md-4 ">
+                    <div class="form-group col-md-3 ">
                      <label>Apellido</label>
                       <input
                         className="form-control bg-white text-dark "
-                       
+                        
                         type="text"
                         name="apellido"
                         value={this.state.apellido}
                         onChange={(value)=>this.setState({apellido:value.target.value})}
                       /> 
                       </div> 
-                      <div class="form-group col-md-4 ">
-                      <label>Cargo</label>
-                      <Input
+                     </div> 
+
+                    <div class="row ">
+                    <div class="form-group col-md-3 ">
+                     <label>Calle</label>
+                      <input
                         className="form-control bg-white text-dark "
                         
-                        type="select"
-                        name="especialidad"
-                        value={this.state.especialidad}
-                        onChange={(value)=>this.setState({especialidad:value.target.value})}
-                      > 
-                      <option value="Matematicas">Matematicas</option>
-                      <option value="Historia">Historia</option>
-                      <option value="Arte">Arte</option>
-                      </Input>
+                        type="text"
+                        name="calle"
+                        value={this.state.calle}
+                        onChange={(value)=>this.setState({calle:value.target.value})}
+                      /> 
+                      </div> 
+                    <div class="form-group col-md-3 ">
+                     <label>Numero </label>
+                      <input
+                        className="form-control bg-white text-dark"
+                       
+                        type="text"
+                        name="numero"
+                        value={this.state.numero}
+                        onChange={(value)=>this.setState({numero:value.target.value})}
+                      /> 
+                      </div> 
+                      <div class="form-group col-md-3 ">
+                      <label>Localidad</label>
+                      <input
+                        className="form-control bg-white text-dark"
+                       
+                        type="text"
+                        name="localidad"
+                        value={this.state.localidad}
+                        onChange={(value)=>this.setState({localidad:value.target.value})}
+                      /> 
+                      </div>
+                      <div class="form-group col-md-3 ">
+                      <label>Cod Postal</label>
+                      <input
+                        className="form-control bg-white text-dark"
+                        
+                        type="number"
+                        name="codigopostal"
+                        value={this.state.codigopostal}
+                        onChange={(value)=>this.setState({codigopostal:value.target.value})}
+                      /> 
                       </div>
                     </div> 
-
                     <div class="row ">
                     <div class="form-group col-md-4 ">
                      <label>Fecha Ingreso</label>
@@ -695,15 +858,19 @@ class TablesAbono extends React.Component {
                       /> 
                       </div> 
                       <div class="form-group col-md-4 ">
-                      <label>Legajo</label>
-                      <input
-                        className="form-control bg-white text-dark"
+                      <label>Cargo</label>
+                      <Input
+                        className="form-control bg-white text-dark "
                        
-                        type="number"
-                        name="legajo"
-                        value={this.state.legajo}
-                        onChange={(value)=>this.setState({legajo:value.target.value})}
-                      /> 
+                        type="select"
+                        name="especialidad"
+                        value={this.state.especialidad}
+                        onChange={(value)=>this.setState({especialidad:value.target.value})}
+                      > 
+                      <option value="Matematicas">Matematicas</option>
+                      <option value="Historia">Historia</option>
+                      <option value="Arte">Arte</option>
+                      </Input>
                       </div>
                     </div> 
                     </div> 
@@ -712,6 +879,7 @@ class TablesAbono extends React.Component {
                     <div class="form-group col-md-4 ">
                       <Label for="exampleSelectMulti">Escuelas</Label>
                       <Select
+                         
                           isMulti
                           options={options}
                           value={this.state.escuelas}
@@ -723,7 +891,7 @@ class TablesAbono extends React.Component {
                       <label>Antiguedad</label>
                       <input
                         className="form-control bg-white text-dark"
-                      
+                        
                         type="number"
                         name="antiguedad"
                         value={this.state.antiguedad}

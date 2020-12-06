@@ -71,15 +71,15 @@ class App extends Component {
             
 
             {showAdminBoard && (
-              <Nav.Link href="/user">Crear/Editar Profesor</Nav.Link>
+              <Nav.Link href="/user">Administrar Profesores</Nav.Link>
               
             )}
              {currentUser && (
-              <Nav.Link href="/reporte">Reportes Profesor</Nav.Link>
+              <Nav.Link href="/reporte">Reportes Profesores</Nav.Link>
               
             )}
              {showAdminBoard && (
-              <Nav.Link href="/escuela">Crear/Editar Escuela</Nav.Link>
+              <Nav.Link href="/escuela">Administrar Escuelas</Nav.Link>
               
             )}
             
@@ -98,7 +98,7 @@ class App extends Component {
           ) : (
             <Nav>
             <Nav.Link href="/login" >Login</Nav.Link>
-            <Nav.Link href="/register" >Sign Up</Nav.Link>
+            {/*<Nav.Link href="/register" >Sign Up</Nav.Link>*/}
             </Nav>
           )}
           

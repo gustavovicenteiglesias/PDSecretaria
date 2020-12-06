@@ -147,7 +147,10 @@ const [columns] = useState([
   { name: 'diegep', title: 'DIEGEP' },
   { name: 'nombre', title: 'Nombre' },
   { name: 'suvencion', title: 'Suvencion' },
-  
+  { name: 'calle', title: 'Calle' },
+  { name: 'numero', title: 'Numero' },
+  { name: 'localidad', title: 'Localidad' },
+
   
  ]);
  const [expandedRowIds, setExpandedRowIds] = useState([]);
@@ -166,7 +169,7 @@ const [columns] = useState([
  
  
  const [filteringColumnExtensions] = useState([]);
-const [hiddenColumnNames, setHiddenColumnNames] = useState([]);
+const [hiddenColumnNames, setHiddenColumnNames] = useState(['calle','numero','localidad']);
 
   return (
     <Paper>
@@ -238,8 +241,14 @@ const [hiddenColumnNames, setHiddenColumnNames] = useState([]);
       
          <Toolbar />
          <h4>Escuelas</h4>
-         <ColumnChooser />
-        <ExportPanel startExport={startExport}/>
+         <ColumnChooser messages={{showColumnChooser:"Ver columnas"}} />
+        <ExportPanel
+          messages={{
+            showExportMenu:"Exportar",
+            exportAll:"Exportar todo",
+            exportSelected:"Exportar seleccíon" 
+          }}
+        startExport={startExport}/>
 
        
       </Grid>
