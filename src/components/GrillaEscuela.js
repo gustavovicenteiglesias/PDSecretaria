@@ -182,12 +182,12 @@ const [hiddenColumnNames, setHiddenColumnNames] = useState(['calle','numero','lo
             defaultCurrentPage={0}
             pageSize={6}
           />
-          <SelectionState
+          {/*<SelectionState
             selection={selection}
             onSelectionChange={setSelection}
-          />
+          />*/}
           <IntegratedPaging />
-          <IntegratedSelection />
+          {/*<IntegratedSelection />*/}
           
         <RowDetailState
           expandedRowIds={expandedRowIds}
@@ -236,7 +236,7 @@ const [hiddenColumnNames, setHiddenColumnNames] = useState(['calle','numero','lo
           onHiddenColumnNamesChange={setHiddenColumnNames}
         />
         
-          <TableSelection showSelectAll  />
+          {/*<TableSelection showSelectAll  />*/}
           <PagingPanel />
       
          <Toolbar />

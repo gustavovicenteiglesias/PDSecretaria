@@ -208,12 +208,12 @@ const [selection, setSelection] = useState([]);
             defaultCurrentPage={0}
             pageSize={6}
           />
-          <SelectionState
+          {/*<SelectionState
             selection={selection}
             onSelectionChange={setSelection}
-          />
+          />*/}
           <IntegratedPaging />
-          <IntegratedSelection />
+        {/*<IntegratedSelection />*/}
           
         <RowDetailState
           expandedRowIds={expandedRowIds}
@@ -264,7 +264,7 @@ const [selection, setSelection] = useState([]);
         <TableRowDetail
           contentComponent={RowDetail}
         />
-          <TableSelection showSelectAll  />
+          {/*<TableSelection showSelectAll  />*/}
           <PagingPanel />
       
          <Toolbar />
