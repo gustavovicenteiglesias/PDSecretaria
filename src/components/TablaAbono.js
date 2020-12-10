@@ -25,7 +25,19 @@ import {
   Label
 } from "reactstrap";
 
-
+const escalafon=[{value:"Director 1º" , label:"Director 1º"},{value:"Director 2º" , label:"Director 2º"},
+{value: "Director 3º", label:"Director 3º"},{value: "Maestra de Sala - Jornada Completa", label:"Maestra de Sala - Jornada Completa"},
+{value:"Maestra de Sala - Jornada Simple" , label:"Maestra de Sala - Jornada Simple"},
+  {value:"Maestra de Grado Jornada Completa" , label:"Maestra de Grado Jornada Completa"},
+  {value:"Preceptora - Jornada Completa" , label:"Preceptora - Jornada Completa"},
+  {value:"Preceptora - Jornada Simple" , label:"Preceptora - Jornada Simple"},
+  {value: "Directora de 2º Jornada Completa", label:"Directora de 2º Jornada Completa"},
+  {value:"Vice-Directora de 2º Jornada Completa" , label:"Vice-Directora de 2º Jornada Completa"},
+  {value:"Secretaria ESB", label:"Secretaria ESB"},
+  {value:"Profesora (EM),Profesor - HC" , label:"Profesora (EM),Profesor - HC"},
+  {value:"Orientadora Escolar" , label:"Orientadora Escolar"},
+  {value: "Secretario,ViceDirectora 2º", label:"Secretario,ViceDirectora 2º"},{value:"Preceptora" , label:"Preceptora"},
+ ]
 let options = [];
 
 class TablesAbono extends React.Component {
@@ -51,7 +63,7 @@ class TablesAbono extends React.Component {
           nombre: "",
           apellido: "",
           legajo: "",
-          especialidad: "",
+          especialidad: null,
           fechaIngreso: "",
           fecha_nacimiento:"",
           titulo_habilitante:'',
@@ -74,8 +86,13 @@ class TablesAbono extends React.Component {
  
   handleChange = escuelas => {
     this.setState({ escuelas });
-    // Option selected: { value: "rojo", label: "rojo" }
+  
     console.log(`Option selected:`, escuelas);
+  };
+  handleChangeCargo = especialidad => {
+    this.setState({ especialidad });
+ 
+    console.log(`Option selected:`, especialidad);
   };
    async setEmpresa(e){
 
@@ -640,17 +657,19 @@ class TablesAbono extends React.Component {
                       <div class="form-group col-md-4 ">
                       <label>Cargo</label>
                       <Input
+                      
                         className="form-control bg-white text-dark "
-                        readOnly={editarModal}
+                        disabled={editarModal}
                         type="select"
                         name="especialidad"
                         value={this.state.especialidad}
                         onChange={(value)=>this.setState({especialidad:value.target.value})}
                       > 
-                      <option value="Matematicas">Matematicas</option>
-                      <option value="Historia">Historia</option>
-                      <option value="Arte">Arte</option>
-                      </Input>
+                      <option value="">Seleccionar</option>
+                      {escalafon.map((data,i)=>{
+                        return(<option value={data.value}>{data.label}</option>)
+                      })}
+                       </Input>
                       </div>
                     </div> 
                     </div> 
@@ -659,6 +678,7 @@ class TablesAbono extends React.Component {
                     <div class="form-group col-md-4 ">
                       <Label for="exampleSelectMulti">Escuelas</Label>
                       <Select
+                          isDisabled={editarModal}
                           readOnly={editarModal}
                           isMulti
                           options={options}
@@ -681,6 +701,7 @@ class TablesAbono extends React.Component {
                       <div class="form-group col-md-4 ">
                       <label>Titulo Habilitante</label>
                       <Input
+                        disabled={editarModal}
                         className="form-control bg-white text-dark "
                         readOnly={editarModal}
                         type="select"
@@ -688,11 +709,13 @@ class TablesAbono extends React.Component {
                         value={this.state.titulo_habilitante}
                         onChange={(value)=>this.setState({titulo_habilitante:value.target.value})}
                       > 
+                      <option value="">Seleccionar</option>
                       <option value="Si">Si</option>
                       <option value="No">No</option>
                       
                       </Input>
                       </div>
+                      
                     </div> 
                     </div>
                 </ModalBody>
@@ -860,6 +883,7 @@ class TablesAbono extends React.Component {
                       <div class="form-group col-md-4 ">
                       <label>Cargo</label>
                       <Input
+                      
                         className="form-control bg-white text-dark "
                        
                         type="select"
@@ -867,10 +891,11 @@ class TablesAbono extends React.Component {
                         value={this.state.especialidad}
                         onChange={(value)=>this.setState({especialidad:value.target.value})}
                       > 
-                      <option value="Matematicas">Matematicas</option>
-                      <option value="Historia">Historia</option>
-                      <option value="Arte">Arte</option>
-                      </Input>
+                      <option value="">Seleccionar</option>
+                      {escalafon.map((data,i)=>{
+                        return(<option value={data.value}>{data.label}</option>)
+                      })}
+                       </Input>
                       </div>
                     </div> 
                     </div> 
@@ -879,7 +904,7 @@ class TablesAbono extends React.Component {
                     <div class="form-group col-md-4 ">
                       <Label for="exampleSelectMulti">Escuelas</Label>
                       <Select
-                         
+                          
                           isMulti
                           options={options}
                           value={this.state.escuelas}
@@ -908,6 +933,7 @@ class TablesAbono extends React.Component {
                         value={this.state.titulo_habilitante}
                         onChange={(value)=>this.setState({titulo_habilitante:value.target.value})}
                       > 
+                      <option value="">Seleccionar</option>
                       <option value="Si">Si</option>
                       <option value="No">No</option>
                       
