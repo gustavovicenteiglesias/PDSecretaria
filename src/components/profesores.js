@@ -264,6 +264,7 @@ class TablesAbono extends PureComponent {
       }
     await put(urlUpdate,paramUpdate);
     this.setState({modalCrear:false});
+    this.setState({listBusquedaProfesor:[paramUpdate]})
     //this.resetLista();
     //this.filtrarElementos();
   }
@@ -772,7 +773,7 @@ class TablesAbono extends PureComponent {
                      <label>Legajo</label>
                       <input
                         className="form-control bg-white text-dark "
-                        readOnly={editarModal}
+                        
                         type="number"
                         name="legajo"
                         value={this.state.legajo}
