@@ -268,6 +268,7 @@ const [selection, setSelection] = useState([]);
           {/*<TableSelection showSelectAll  />*/}
           <PagingPanel 
           pageSizes={pageSizes}
+          messages={{rowsPerPage:"Lineas por página"}}
           />
       
          <Toolbar />

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { get,put,delet} from "../services/Axios1";
 
 import Busqueda from "./Busqueda";
-
+import { Loading } from '../theme-sources/material-ui/components/loading';
 
 import ReactTooltip from "react-tooltip";
 
@@ -50,7 +50,7 @@ class Escuela extends React.Component {
           nombre: "",
           diegep: "",
           suvencion: "",
-         
+          loading:true,
           modalEditar:false,
           modalEliminar:false,
           editarModal:true,
@@ -264,7 +264,7 @@ class Escuela extends React.Component {
     else {
       alert("Error server ==>"+JSON.stringify(rest))
     }*/
- this.setState({listBusquedaEscuela:this.state.listEscuela});
+ this.setState({listBusquedaEscuela:this.state.listEscuela,loading:false});
  
   
   }
@@ -298,7 +298,7 @@ class Escuela extends React.Component {
                   <CardTitle tag="h4">Escuelas</CardTitle>
                   </div>
                     <div class="form-group col-md-6 ">
-                    <Busqueda searchBusqueda={this.valorSearchEmpresa}/>
+                    <Busqueda searchBusqueda={this.valorSearchEmpresa} placeholders={"Buscar "}/>
                     </div>
                    </div>
                 </CardHeader>
@@ -325,6 +325,10 @@ class Escuela extends React.Component {
                     </thead>
                     <tbody>
                       {
+                        this.state.loading ? ( <Loading/>
+                          //color={'#123abc'}
+                          //loading={this.state.loading}
+                        ) : (
               this.state.listBusquedaEscuela.map((data,i)=>{
                 return(
                   <tr>
@@ -361,6 +365,7 @@ class Escuela extends React.Component {
                   </tr>
                 )
               })
+                        )
             }
                     </tbody>
                   </Table>

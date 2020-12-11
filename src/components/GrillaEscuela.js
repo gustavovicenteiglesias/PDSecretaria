@@ -17,7 +17,7 @@ import { EditingState ,
   IntegratedPaging,
   IntegratedSelection,
 } from '@devexpress/dx-react-grid';
-
+import { Loading } from '../theme-sources/material-ui/components/loading';
 import { GridExporter } from '@devexpress/dx-react-grid-export';  
 import {
   Grid,
@@ -136,7 +136,8 @@ export default () => {
   const [rows,setRows] = useState([]);
   const getData = async () => {
     const  {list} = await get(URL);
-    setRows(list)
+    setRows(list);
+    setLoading(false);
     }
     useMemo(()=>{
       getData()
@@ -166,7 +167,8 @@ const [columns] = useState([
      'lessThan',
      'lessThanOrEqual',
  ]);
- 
+ const [pageSizes] = useState([5, 10, 15, 0]);
+ const [loading, setLoading] = useState(true);
  
  const [filteringColumnExtensions] = useState([]);
 const [hiddenColumnNames, setHiddenColumnNames] = useState(['calle','numero','localidad']);
@@ -179,8 +181,8 @@ const [hiddenColumnNames, setHiddenColumnNames] = useState(['calle','numero','lo
         
       >
         <PagingState
-            defaultCurrentPage={0}
-            pageSize={6}
+             defaultCurrentPage={0}
+             defaultPageSize={5}
           />
           {/*<SelectionState
             selection={selection}
@@ -237,7 +239,10 @@ const [hiddenColumnNames, setHiddenColumnNames] = useState(['calle','numero','lo
         />
         
           {/*<TableSelection showSelectAll  />*/}
-          <PagingPanel />
+          <PagingPanel
+          pageSizes={pageSizes}
+          messages={{rowsPerPage:"Lineas por página"}}
+          />
       
          <Toolbar />
          <h4>Escuelas</h4>
@@ -252,6 +257,7 @@ const [hiddenColumnNames, setHiddenColumnNames] = useState(['calle','numero','lo
 
        
       </Grid>
+      {loading && <Loading />}
       <GridExporter
         ref={exporterRef}
         rows={rows}

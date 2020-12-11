@@ -438,7 +438,7 @@ class TablesAbono extends PureComponent {
                   <CardTitle tag="h4">Profesores</CardTitle>
                   </div>
                     <div class="form-group col-md-6 ">
-                    <Busqueda searchBusqueda={this.valorSearchEmpresa}/>
+                    <Busqueda placeholders={"Buscar por legajo"} searchBusqueda={this.valorSearchEmpresa}/>
                             </div>
                   
                     </div>
