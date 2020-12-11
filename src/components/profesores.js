@@ -1,5 +1,5 @@
 import React, { Component, Fragment, PureComponent } from "react";
-import { get,put,delet} from "../services/Axios1";
+import { get,put,delet, getBusqueda} from "../services/Axios1";
 
 import Busqueda from "./Busqueda";
 import Select from "react-select";
@@ -204,7 +204,7 @@ class TablesAbono extends PureComponent {
       })
   }
 
-  async resetLista(){
+ /* async resetLista(){
 
     const res = await get('https://secretaria-educacion.herokuapp.com/api/profesor/all')
     console.log('res');
@@ -218,7 +218,7 @@ class TablesAbono extends PureComponent {
     }
 
   }
-
+*/
   async onClickSave()
   {
     const urlUpdate='https://secretaria-educacion.herokuapp.com/api/profesor/create/';
@@ -264,8 +264,8 @@ class TablesAbono extends PureComponent {
       }
     await put(urlUpdate,paramUpdate);
     this.setState({modalCrear:false});
-    this.resetLista();
-    this.filtrarElementos();
+    //this.resetLista();
+    //this.filtrarElementos();
   }
 
 
@@ -288,8 +288,8 @@ class TablesAbono extends PureComponent {
          this.setState((state)=>({listBusquedaProfesor:list,
                       modalEliminar:false
         }))
-        this.resetLista();
-        this.filtrarElementos();
+        //this.resetLista();
+        //this.filtrarElementos();
     }
   }
 
@@ -345,8 +345,9 @@ class TablesAbono extends PureComponent {
      
       await put(urlUpdate,paramUpdate);
      this.setState({modalEditar:false});
-       this.resetLista();
-        this.filtrarElementos();
+       //this.resetLista();
+        //this.filtrarElementos();
+       this.setState({listBusquedaProfesor:[paramUpdate]})
    }
     
   
@@ -354,37 +355,28 @@ class TablesAbono extends PureComponent {
   
   
  async valorSearchEmpresa(emp){
-  console.log('emp')
-  console.log(emp)
-   await this.setState({busqueda:emp})
-  // this.setState((state) => ({busqueda:state.busqueda}));
-  this.filtrarElementos();
+    var search=await getBusqueda('https://secretaria-educacion.herokuapp.com/api/profesor/buscarlike/'+emp)
+    console.log('busqueda')
+      console.log(search)
+      if(!search.success){
+        this.setState({listBusquedaProfesor:[]})    
+      }else
+      {this.setState({listBusquedaProfesor:search.data})}
  }
 
- filtrarElementos=()=>{
+ /*filtrarElementos=(emp)=>{
    
   const lista=this.state.listProfesor;
-  var search=lista.filter(item=>{
-    if(item.legajo.toString().includes(this.state.busqueda)//||
-      // item.nombre.includes(this.state.busqueda)//||
-       //item.idEmpresa.nombre.includes(this.state.busqueda)||
-       //item.idTecnico.nombre.toLowerCase().includes(this.state.busqueda)||
-       //item.idTecnico.nombre.includes(this.state.busqueda)
-       )
-  
-            {
-              return item
-            }
-  })
+  var search=await getBusqueda('https://secretaria-educacion.herokuapp.com/api/profesor/find/'+emp)
   console.log('busqueda')
     console.log(search)
     this.setState({listBusquedaProfesor:search})
- }
+ }*/
   
   async componentDidMount(){
-
+   
     //this.setState({listBusquedaProfesor:this.state.listProfesor});
-    console.log("Mounted List");
+    /*console.log("Mounted List");
     const res = await get('https://secretaria-educacion.herokuapp.com/api/profesor/all')
     console.log(res);
     if (res.success) {
@@ -397,7 +389,7 @@ class TablesAbono extends PureComponent {
       alert("Error server ==>"+JSON.stringify(res))
     }
 
-  
+  */
 
      console.log("Mounted ListEscuela");
     const res1 = await get('https://secretaria-educacion.herokuapp.com/api/escuela/all')
@@ -407,7 +399,7 @@ class TablesAbono extends PureComponent {
       
     }
     else {
-      alert("Error server ==>"+JSON.stringify(res))
+      alert("Error server ==>"+JSON.stringify(res1))
     }
 
  

@@ -21,7 +21,7 @@ class Busqueda extends React.Component{
   
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" 
-      placeholder="Buscar" aria-label="Search"
+      placeholder="Buscar por legajo" aria-label="Search"
       onChange={this.handleChangeEmpresa}
       />
       

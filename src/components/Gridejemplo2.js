@@ -38,7 +38,7 @@ import {
     ColumnChooser
 } from '@devexpress/dx-react-grid-material-ui';
 
-
+import { Loading } from '../theme-sources/material-ui/components/loading';
 //import DateFnsUtils from '@date-io/date-fns'
 import { get } from "../services/Axios1";
 import Input from '@material-ui/core/Input';
@@ -125,6 +125,7 @@ export default () => {
   const getData = async () => {
     const  {list} = await get(URL);
     setRows(list)
+    setLoading(false);
     }
     useMemo(()=>{
       getData()
@@ -148,7 +149,7 @@ const [columns] = useState([
  const [sorting, setSorting] = useState([{ columnName: 'nombre', direction: 'asc' }]);
  const [dateColumns] = useState(['fechaIngreso','fecha_nacimiento']);
  const [dateFilterOperations] = useState(['month', 'contains', 'startsWith', 'endsWith']);
- const [currencyColumns] = useState(['legajo','dni']);
+ const [currencyColumns] = useState(['dni']);
  const [currencyFilterOperations] = useState([
      'equal',
      'notEqual',
@@ -157,8 +158,8 @@ const [columns] = useState([
      'lessThan',
      'lessThanOrEqual',
  ]);
- 
- 
+ const [pageSizes] = useState([5, 10, 15, 0]);
+ const [loading, setLoading] = useState(true);
  const [filteringColumnExtensions] = useState([
  {
    columnName: 'fechaIngreso',
@@ -206,7 +207,7 @@ const [selection, setSelection] = useState([]);
       >
         <PagingState
             defaultCurrentPage={0}
-            pageSize={6}
+            defaultPageSize={5}
           />
           {/*<SelectionState
             selection={selection}
@@ -265,7 +266,9 @@ const [selection, setSelection] = useState([]);
           contentComponent={RowDetail}
         />
           {/*<TableSelection showSelectAll  />*/}
-          <PagingPanel />
+          <PagingPanel 
+          pageSizes={pageSizes}
+          />
       
          <Toolbar />
          <h4>Profesores</h4>
@@ -280,6 +283,7 @@ const [selection, setSelection] = useState([]);
 
        
       </Grid>
+      {loading && <Loading />}
       <GridExporter
         ref={exporterRef}
         rows={rows}
@@ -289,6 +293,7 @@ const [selection, setSelection] = useState([]);
         
         onSave={onSave}
       />
+      
     </Paper>
   );
 };

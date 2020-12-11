@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Grilla from './Gridejemplo';
+//import Grilla from './Gridejemplo2';
 
 import Grilla2 from './Gridejemplo2'
 import UserService from "../services/user.service";

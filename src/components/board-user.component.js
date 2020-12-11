@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Grilla from './Gridejemplo';
 
-import Grilla2 from './TablaAbono'
+import Grilla2 from './profesores'
 import UserService from "../services/user.service";
 import Tabla from './Tabla'
 export default class BoardUser extends Component {

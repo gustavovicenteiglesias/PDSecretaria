@@ -4,7 +4,14 @@ import authHeader from './auth-header';
     path: string
 ): Promise<T> {
     const { data } = await axios.get(path,{ headers: authHeader() });
-    console.log(data)
+    
+    return data;
+};
+export async function getBusqueda<T>(
+    path: string
+): Promise<T> {
+    const { data } = await axios.get(path,{ headers: authHeader() });
+    
     return data;
 };
 export async function put(path:string,params:null)
