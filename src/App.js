@@ -112,11 +112,11 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
-            <Route path="/user" component={BoardUser} />
+            {showAdminBoard &&(<Route path="/user" component={BoardUser} />)}
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
             <Route path="/reporte" component={BoardReportes} />
-            <Route path="/escuela" component={Escuela} />
+            {showAdminBoard &&(<Route path="/escuela" component={Escuela} />)}
             <Route path="/reporteescuela" component={GrillaEscuela} />
           </Switch>
         </div>
